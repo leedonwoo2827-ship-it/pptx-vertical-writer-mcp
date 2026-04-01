@@ -1,0 +1,9 @@
+{
+  "pptx-vertical-writer": {
+    "command": "python",
+    "args": ["-X", "utf8", "server.py"],
+    "env": {
+      "PYTHONIOENCODING": "utf-8"
+    }
+  }
+}

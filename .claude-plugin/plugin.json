@@ -1,0 +1,7 @@
+{
+  "name": "pptx-vertical-writer-mcp",
+  "version": "1.0.0",
+  "description": "회사 표준 PPTX 템플릿을 분석하고, 마크다운 텍스트를 PowerPoint 프레젠테이션으로 변환하는 MCP 서버 + 스킬. 참조 PPTX의 레이아웃/디자인을 100% 보존하면서 텍스트만 교체합니다.",
+  "author": { "name": "proposal-team" },
+  "keywords": ["pptx", "powerpoint", "template", "proposal", "mcp", "korean"]
+}
