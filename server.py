@@ -233,6 +233,262 @@ def create_pptx(
 
 
 # ---------------------------------------------------------------------------
+# 템플릿 관리 도구
+# ---------------------------------------------------------------------------
+
+@mcp.tool()
+def showcase_templates() -> str:
+    """등록된 슬라이드 템플릿을 PNG 미리보기와 함께 쇼케이스합니다.
+
+    각 템플릿 타입(T0~T9)의 용도, 어울리는 콘텐츠 유형, 필드 목록,
+    대표 슬라이드 이미지 경로를 반환합니다.
+
+    Returns:
+        템플릿 쇼케이스 (JSON) — 이미지 경로 포함
+    """
+    if not DEFAULT_SLIDE_INDEX.exists():
+        return "오류: slide_index.json이 없습니다. analyze_template()을 먼저 실행하세요."
+
+    with open(DEFAULT_SLIDE_INDEX, 'r', encoding='utf-8') as f:
+        idx = json.load(f)
+
+    from collections import Counter
+    tmpl_counts = Counter(s['template'] for s in idx.get('slides', []))
+
+    SHOWCASE = {
+        'T0': {
+            'name': '구분페이지',
+            'when': '섹션/챕터 구분, 목차 페이지',
+            'content': '제목 1줄',
+            'fields': ['@content_1'],
+        },
+        'T1': {
+            'name': '카드형 다중',
+            'when': '현황/문제점/개선방향, 접근전략/수행체계, 비교 분석',
+            'content': '카드 2~6개 (제목 + 본문 각 1~3문장)',
+            'fields': ['@governing_message', '@breadcrumb', '@content_1', '@카드N_제목', '@카드N_내용 (N=1~6)'],
+        },
+        'T2': {
+            'name': '카드+다이어그램',
+            'when': '사업 목적, 전략 개요 (카드 + 세분화 불릿)',
+            'content': '카드 2~3개 + 세분화 항목',
+            'fields': ['@카드N_제목/내용', '@content_N', '@label_N', '@section_title_N'],
+        },
+        'T3': {
+            'name': '범위/개요 (거버닝메시지)',
+            'when': '사업 범위, 핵심 개요, 비전',
+            'content': 'Governing Message + 핵심 문구 + 6개 영역 설명',
+            'fields': ['@governing_message', '@breadcrumb', '@heading_1', '@content_N', '@section_title_N'],
+        },
+        'T4': {
+            'name': '다중 데이터테이블',
+            'when': '복수 테이블, 일정표, 비교 매트릭스',
+            'content': '마크다운 테이블 2개 이상',
+            'fields': ['@governing_message', '마크다운 테이블'],
+        },
+        'T5': {
+            'name': '테이블+다이어그램',
+            'when': '데이터 테이블 + 시각적 설명 다이어그램',
+            'content': '테이블 1개 + 설명 텍스트',
+            'fields': ['@governing_message', '마크다운 테이블', '@content_N'],
+        },
+        'T6': {
+            'name': '순수 데이터테이블',
+            'when': '큰 데이터 표, 지표, 상세 스펙',
+            'content': '마크다운 테이블 (10줄 이상)',
+            'fields': ['@governing_message', '마크다운 테이블'],
+        },
+        'T7': {
+            'name': '테이블+설명shape (프로세스)',
+            'when': '프로세스 흐름, 단계별 설명 + 데이터',
+            'content': '프로세스 단계 + 테이블',
+            'fields': ['@governing_message', '@heading_N', '@content_N', '마크다운 테이블'],
+        },
+        'T8': {
+            'name': '이미지중심',
+            'when': '조직도, 시스템 구성도, 스크린샷, 사진',
+            'content': '이미지 + 캡션/설명 텍스트',
+            'fields': ['@governing_message', '@content_N (이미지 설명)'],
+        },
+        'T9': {
+            'name': '핵심메시지/다이어그램',
+            'when': '핵심 포인트 나열, CSF, 성공요소, 원칙',
+            'content': '핵심 문구 3~6개',
+            'fields': ['@governing_message', '@breadcrumb', '@content_N (N=1~6)'],
+        },
+    }
+
+    result = []
+    for tmpl_code in sorted(SHOWCASE.keys()):
+        info = SHOWCASE[tmpl_code]
+        rep_slides = [s['slide_number'] for s in idx['slides'] if s['template'] == tmpl_code][:3]
+        images = []
+        for sn in rep_slides:
+            img = TEMPLATE_IMAGES_DIR / f"S{sn:03d}_{tmpl_code}.png"
+            if img.exists():
+                images.append(str(img))
+
+        result.append({
+            **info,
+            'template': tmpl_code,
+            'count': tmpl_counts.get(tmpl_code, 0),
+            'representative_slides': rep_slides,
+            'preview_images': images,
+        })
+
+    return json.dumps(result, ensure_ascii=False, indent=2)
+
+
+@mcp.tool()
+def match_slide(
+    pptx_path: str,
+    slide_number: int
+) -> str:
+    """PPTX 파일의 특정 슬라이드를 분석하여 기존 템플릿(T0~T9)과 매칭합니다.
+
+    새 슬라이드를 넣으면 shape 구성(AutoShape, Table, Picture 등)을 분석하여
+    가장 유사한 기존 템플릿을 찾아줍니다.
+
+    Args:
+        pptx_path: 분석할 PPTX 파일 경로
+        slide_number: 분석할 슬라이드 번호 (1부터 시작)
+
+    Returns:
+        매칭 결과 (상위 5개 후보 + 특성 분석)
+    """
+    from template_matcher import analyze_and_match
+
+    p = Path(pptx_path)
+    if not p.exists():
+        return f"오류: 파일을 찾을 수 없습니다: {pptx_path}"
+
+    try:
+        result = analyze_and_match(str(p), slide_number)
+
+        if 'error' in result:
+            return f"오류: {result['error']}"
+
+        best = result['best_match']
+        features = result['features']
+
+        output = f"슬라이드 #{slide_number} 분석 결과\n\n"
+        output += f"shape 구성: 총 {features['total_shapes']}개\n"
+        output += f"  AutoShape: {features['auto_shapes']}, TextBox: {features['text_boxes']}\n"
+        output += f"  카드테이블(2x1): {features['card_tables']}, 데이터테이블: {features['data_tables']}\n"
+        output += f"  이미지: {features['pictures']}, 그룹: {features['groups']}\n\n"
+
+        output += f"가장 유사한 템플릿: {best['template']} ({best['name']}) — 유사도 {best['score']:.0%}\n\n"
+        output += "상위 5개 후보:\n"
+        for m in result['matches']:
+            output += f"  {m['template']} ({m['name']}): {m['score']:.0%}\n"
+
+        return output
+
+    except Exception as e:
+        return f"오류: {type(e).__name__}: {e}"
+
+
+@mcp.tool()
+def add_template(
+    pptx_path: str,
+    slide_number: int,
+    template_name: str = ""
+) -> str:
+    """새 슬라이드를 템플릿으로 등록합니다.
+
+    지정된 PPTX의 슬라이드를 분석하여 slide_index.json에 추가하고,
+    PNG 미리보기를 생성합니다.
+
+    Args:
+        pptx_path: 슬라이드가 포함된 PPTX 파일 경로
+        slide_number: 등록할 슬라이드 번호
+        template_name: 템플릿 이름 (예: "T11_프로세스맵"). 생략 시 자동 매칭 결과 사용
+
+    Returns:
+        등록 결과
+    """
+    from template_matcher import analyze_and_match
+    from template_extractor import classify_shape_role, extract_shape_info
+    from pptx import Presentation as PptxPresentation
+
+    p = Path(pptx_path)
+    if not p.exists():
+        return f"오류: 파일을 찾을 수 없습니다: {pptx_path}"
+
+    try:
+        prs = PptxPresentation(str(p))
+        if slide_number < 1 or slide_number > len(prs.slides):
+            return f"오류: 슬라이드 번호 범위 초과 (1~{len(prs.slides)})"
+
+        slide = prs.slides[slide_number - 1]
+
+        # 템플릿 이름 자동 결정
+        if not template_name:
+            result = analyze_and_match(str(p), slide_number)
+            best = result.get('best_match', {})
+            if best.get('score', 0) >= 0.8:
+                template_name = best['template']
+            else:
+                # 새 번호 부여
+                existing = set()
+                if DEFAULT_SLIDE_INDEX.exists():
+                    with open(DEFAULT_SLIDE_INDEX, 'r', encoding='utf-8') as f:
+                        for s in json.load(f).get('slides', []):
+                            existing.add(s.get('template', ''))
+                for i in range(10, 100):
+                    if f'T{i}' not in existing:
+                        template_name = f'T{i}'
+                        break
+
+        # shape 분석
+        shapes_info = []
+        role_map = {}
+        for shape in slide.shapes:
+            role = classify_shape_role(shape, slide.shapes)
+            s_info = extract_shape_info(shape)
+            s_info['role'] = role
+            si = len(shapes_info)
+            shapes_info.append(s_info)
+            role_map.setdefault(role, []).append(si)
+
+        # slide_index.json에 추가
+        if DEFAULT_SLIDE_INDEX.exists():
+            with open(DEFAULT_SLIDE_INDEX, 'r', encoding='utf-8') as f:
+                idx = json.load(f)
+        else:
+            idx = {'slides': [], 'total_slides': 0}
+
+        new_slide_num = idx['total_slides'] + 1
+        idx['slides'].append({
+            'slide_number': new_slide_num,
+            'template': template_name,
+            'template_name': template_name,
+            'layout_name': slide.slide_layout.name,
+            'shape_count': len(shapes_info),
+            'role_map': role_map,
+            'shapes': shapes_info,
+            'source_pptx': str(p.name),
+            'source_slide': slide_number,
+        })
+        idx['total_slides'] = new_slide_num
+
+        with open(DEFAULT_SLIDE_INDEX, 'w', encoding='utf-8') as f:
+            json.dump(idx, f, ensure_ascii=False, indent=2)
+
+        return (
+            f"템플릿 등록 완료!\n"
+            f"  이름: {template_name}\n"
+            f"  슬라이드 번호: {new_slide_num}\n"
+            f"  shape 수: {len(shapes_info)}\n"
+            f"  원본: {p.name} 슬라이드 #{slide_number}\n"
+            f"  slide_index.json 업데이트됨"
+        )
+
+    except Exception as e:
+        return f"오류: {type(e).__name__}: {e}"
+
+
+# ---------------------------------------------------------------------------
 # 진입점
 # ---------------------------------------------------------------------------
 
