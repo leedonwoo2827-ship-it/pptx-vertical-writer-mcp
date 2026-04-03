@@ -231,8 +231,19 @@ def build_presentation(md_data: dict, slide_index: dict, output_path: str):
     pp = _get_powerpoint()
 
     try:
-        # 참조 PPTX 열기
+        # 참조 PPTX 열기 (기본 + 슬라이드별 오버라이드 캐시)
+        ref_prs_cache = {}  # path -> COM Presentation
         ref_prs = pp.Presentations.Open(ref_pptx_path, WithWindow=False)
+        ref_prs_cache[ref_pptx_path] = ref_prs
+
+        def get_ref_prs(pptx_path):
+            """캐시된 참조 프레젠테이션 반환, 없으면 열기"""
+            abs_path = os.path.abspath(pptx_path)
+            if abs_path not in ref_prs_cache:
+                if not os.path.exists(abs_path):
+                    raise FileNotFoundError(f'슬라이드별 참조 PPTX 파일을 찾을 수 없습니다: {abs_path}')
+                ref_prs_cache[abs_path] = pp.Presentations.Open(abs_path, WithWindow=False)
+            return ref_prs_cache[abs_path]
 
         # 새 프레젠테이션 생성 (참조와 같은 크기)
         # 방법: 참조 파일을 복사해서 열고, 불필요한 슬라이드 제거
@@ -250,15 +261,29 @@ def build_presentation(md_data: dict, slide_index: dict, output_path: str):
             ref_slide_num = slide_data.get('ref_slide')
             if ref_slide_num is None:
                 continue
-            if ref_slide_num < 1 or ref_slide_num > ref_prs.Slides.Count:
-                print(f'  Warning: ref_slide {ref_slide_num} out of range, skipping')
+
+            # 슬라이드별 reference_pptx 오버라이드 지원
+            slide_ref_pptx = slide_data.get('reference_pptx')
+            if slide_ref_pptx:
+                current_ref_prs = get_ref_prs(slide_ref_pptx)
+            else:
+                current_ref_prs = ref_prs
+
+            # slide_index에서 해당 슬라이드 정보 조회
+            slide_info = slides_info.get(ref_slide_num, {})
+
+            # source_slide: PPTX 내 실제 슬라이드 번호 (merge 시 가상 번호와 다를 수 있음)
+            source_slide_num = slide_info.get('source_slide', ref_slide_num)
+
+            if source_slide_num < 1 or source_slide_num > current_ref_prs.Slides.Count:
+                print(f'  Warning: source_slide {source_slide_num} (ref_slide {ref_slide_num}) out of range, skipping')
                 continue
 
             # 참조 슬라이드를 타겟에 복사 (클립보드 안정성을 위해 재시도)
             import time
             for attempt in range(3):
                 try:
-                    ref_prs.Slides(ref_slide_num).Copy()
+                    current_ref_prs.Slides(source_slide_num).Copy()
                     time.sleep(0.5)
                     target_prs.Slides.Paste()
                     break
@@ -271,9 +296,6 @@ def build_presentation(md_data: dict, slide_index: dict, output_path: str):
             # 방금 붙여넣은 슬라이드 (마지막)
             new_slide_idx = target_prs.Slides.Count
             new_slide = target_prs.Slides(new_slide_idx)
-
-            # 텍스트 교체
-            slide_info = slides_info.get(ref_slide_num, {})
             fields = slide_data.get('fields', {})
             tables = slide_data.get('tables', [])
             if fields or tables:
@@ -288,7 +310,13 @@ def build_presentation(md_data: dict, slide_index: dict, output_path: str):
         # ppSaveAsOpenXMLPresentation = 24
         target_prs.SaveAs(output_path, 24)
         target_prs.Close()
-        ref_prs.Close()
+
+        # 모든 캐시된 참조 프레젠테이션 닫기
+        for cached_prs in ref_prs_cache.values():
+            try:
+                cached_prs.Close()
+            except Exception:
+                pass
 
         # 임시 파일 정리
         if os.path.exists(temp_path):

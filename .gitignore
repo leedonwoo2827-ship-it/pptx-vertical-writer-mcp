@@ -5,3 +5,10 @@ __pycache__/
 *.tmp.*
 *.tmp.pptx
 *.zip
+template-images/
+*.pptx
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp

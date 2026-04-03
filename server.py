@@ -52,7 +52,7 @@ def _resolve_output(project_dir: str, output_file: str, fallback: str = "output.
 def list_templates() -> str:
     """사용 가능한 슬라이드 템플릿 목록을 반환합니다.
 
-    각 템플릿 타입(T0~T9)의 용도, 슬라이드 수, 대표 이미지 경로를 포함합니다.
+    각 템플릿 타입(T0~T9)의 용도, 슬라이드 수를 포함합니다.
     글쓰기 스킬에서 적합한 템플릿을 추천할 때 사용합니다.
 
     Returns:
@@ -86,19 +86,12 @@ def list_templates() -> str:
     for tmpl_code in sorted(tmpl_counts.keys()):
         # 대표 슬라이드 번호
         rep_slides = [s['slide_number'] for s in idx['slides'] if s['template'] == tmpl_code][:3]
-        # 대표 이미지 경로
-        images = []
-        for sn in rep_slides:
-            img = TEMPLATE_IMAGES_DIR / f"S{sn:03d}_{tmpl_code}.png"
-            if img.exists():
-                images.append(str(img))
 
         catalog.append({
             'template': tmpl_code,
             'name': TEMPLATE_NAMES.get(tmpl_code, '기타'),
             'slide_count': tmpl_counts[tmpl_code],
             'representative_slides': rep_slides,
-            'preview_images': images,
         })
 
     return json.dumps(catalog, ensure_ascii=False, indent=2)
@@ -238,13 +231,12 @@ def create_pptx(
 
 @mcp.tool()
 def showcase_templates() -> str:
-    """등록된 슬라이드 템플릿을 PNG 미리보기와 함께 쇼케이스합니다.
+    """등록된 슬라이드 템플릿을 쇼케이스합니다.
 
-    각 템플릿 타입(T0~T9)의 용도, 어울리는 콘텐츠 유형, 필드 목록,
-    대표 슬라이드 이미지 경로를 반환합니다.
+    각 템플릿 타입(T0~T9)의 용도, 어울리는 콘텐츠 유형, 필드 목록을 반환합니다.
 
     Returns:
-        템플릿 쇼케이스 (JSON) — 이미지 경로 포함
+        템플릿 쇼케이스 (JSON)
     """
     if not DEFAULT_SLIDE_INDEX.exists():
         return "오류: slide_index.json이 없습니다. analyze_template()을 먼저 실행하세요."
@@ -322,18 +314,12 @@ def showcase_templates() -> str:
     for tmpl_code in sorted(SHOWCASE.keys()):
         info = SHOWCASE[tmpl_code]
         rep_slides = [s['slide_number'] for s in idx['slides'] if s['template'] == tmpl_code][:3]
-        images = []
-        for sn in rep_slides:
-            img = TEMPLATE_IMAGES_DIR / f"S{sn:03d}_{tmpl_code}.png"
-            if img.exists():
-                images.append(str(img))
 
         result.append({
             **info,
             'template': tmpl_code,
             'count': tmpl_counts.get(tmpl_code, 0),
             'representative_slides': rep_slides,
-            'preview_images': images,
         })
 
     return json.dumps(result, ensure_ascii=False, indent=2)

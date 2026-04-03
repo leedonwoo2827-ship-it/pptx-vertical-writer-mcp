@@ -32,6 +32,17 @@ TEMPLATE_MAP = {
     124:'T6', 125:'T8', 126:'T5', 127:'T4', 128:'T4'
 }
 
+# III권 템플릿 분류 맵 (47 슬라이드)
+TEMPLATE_MAP_VOL3 = {
+    1:'T9', 2:'T9', 3:'T0', 4:'T0', 5:'T0', 6:'T1', 7:'T0', 8:'T0',
+    9:'T0', 10:'T9', 11:'T0', 12:'T5', 13:'T0', 14:'T0', 15:'T1',
+    16:'T0', 17:'T0', 18:'T6', 19:'T6', 20:'T0', 21:'T0', 22:'T8',
+    23:'T0', 24:'T6', 25:'T8', 26:'T0', 27:'T9', 28:'T6', 29:'T0',
+    30:'T3', 31:'T0', 32:'T0', 33:'T8', 34:'T6', 35:'T0', 36:'T0',
+    37:'T6', 38:'T0', 39:'T0', 40:'T8', 41:'T7', 42:'T0', 43:'T0',
+    44:'T0', 45:'T0', 46:'T9', 47:'T9'
+}
+
 TEMPLATE_NAMES = {
     'T0': '구분페이지',
     'T1': '카드형 다중 (현황분석)',
@@ -181,12 +192,23 @@ def extract_shape_info(shape):
     return info
 
 
-def extract_slide_index(pptx_path, output_path):
-    """참조 PPTX를 분석하여 slide_index.json 생성"""
+def extract_slide_index(pptx_path, output_path, template_map=None,
+                        slide_offset=0, source_label=""):
+    """참조 PPTX를 분석하여 slide_index.json 생성.
+
+    Args:
+        template_map: 사용할 템플릿 맵 (기본: TEMPLATE_MAP)
+        slide_offset: slide_number에 더할 오프셋 (merge용)
+        source_label: source_pptx 필드에 저장할 라벨 (빈 문자열이면 파일명 사용)
+    """
+    if template_map is None:
+        template_map = TEMPLATE_MAP
+
     prs = Presentation(pptx_path)
+    source_name = source_label or os.path.basename(pptx_path)
 
     slide_index = {
-        'source_pptx': os.path.basename(pptx_path),
+        'source_pptx': source_name,
         'slide_width': prs.slide_width,
         'slide_height': prs.slide_height,
         'total_slides': len(prs.slides),
@@ -195,8 +217,9 @@ def extract_slide_index(pptx_path, output_path):
     }
 
     for idx, slide in enumerate(prs.slides):
-        slide_num = idx + 1
-        template_code = TEMPLATE_MAP.get(slide_num, 'T14')
+        actual_num = idx + 1
+        slide_num = actual_num + slide_offset
+        template_code = template_map.get(actual_num, 'T14')
 
         shapes_info = []
         for shape in slide.shapes:
@@ -215,19 +238,21 @@ def extract_slide_index(pptx_path, output_path):
 
         slide_entry = {
             'slide_number': slide_num,
+            'source_pptx': source_name,
+            'source_slide': actual_num,
             'template': template_code,
             'template_name': TEMPLATE_NAMES.get(template_code, '기타'),
             'layout_name': slide.slide_layout.name,
             'shape_count': len(shapes_info),
             'role_map': role_map,
             'shapes': shapes_info,
-            'image_file': f'S{slide_num:03d}_{template_code}.png'
+            'image_file': f'S{slide_num:04d}_{template_code}.png'
         }
 
         slide_index['slides'].append(slide_entry)
 
-        if slide_num % 20 == 0:
-            print(f'  Processed {slide_num}/{len(prs.slides)}...')
+        if actual_num % 20 == 0:
+            print(f'  Processed {actual_num}/{len(prs.slides)}...')
 
     with open(output_path, 'w', encoding='utf-8') as f:
         json.dump(slide_index, f, ensure_ascii=False, indent=2)
@@ -245,12 +270,109 @@ def extract_slide_index(pptx_path, output_path):
     return slide_index
 
 
+def extract_and_merge(pptx_list, output_path):
+    """여러 PPTX를 분석하여 하나의 slide_index.json으로 병합.
+
+    Args:
+        pptx_list: [(pptx_path, template_map, slide_offset, source_label), ...]
+        output_path: 병합된 slide_index.json 저장 경로
+    """
+    merged_slides = []
+    first_width = None
+    first_height = None
+
+    for pptx_path, template_map, slide_offset, source_label in pptx_list:
+        print(f'\n=== Analyzing: {os.path.basename(pptx_path)} (offset={slide_offset}) ===')
+        prs = Presentation(pptx_path)
+        source_name = source_label or os.path.basename(pptx_path)
+
+        if first_width is None:
+            first_width = prs.slide_width
+            first_height = prs.slide_height
+
+        for idx, slide in enumerate(prs.slides):
+            actual_num = idx + 1
+            slide_num = actual_num + slide_offset
+            template_code = template_map.get(actual_num, 'T14')
+
+            shapes_info = []
+            for shape in slide.shapes:
+                role = classify_shape_role(shape, slide.shapes)
+                s_info = extract_shape_info(shape)
+                s_info['role'] = role
+                shapes_info.append(s_info)
+
+            role_map = {}
+            for si, s in enumerate(shapes_info):
+                role = s['role']
+                if role not in role_map:
+                    role_map[role] = []
+                role_map[role].append(si)
+
+            slide_entry = {
+                'slide_number': slide_num,
+                'source_pptx': source_name,
+                'source_slide': actual_num,
+                'template': template_code,
+                'template_name': TEMPLATE_NAMES.get(template_code, '기타'),
+                'layout_name': slide.slide_layout.name,
+                'shape_count': len(shapes_info),
+                'role_map': role_map,
+                'shapes': shapes_info,
+                'image_file': f'S{slide_num:04d}_{template_code}.png'
+            }
+            merged_slides.append(slide_entry)
+
+            if actual_num % 20 == 0:
+                print(f'  Processed {actual_num}/{len(prs.slides)}...')
+
+        print(f'  Done: {len(prs.slides)} slides from {source_name}')
+
+    merged_index = {
+        'source_pptx': 'merged',
+        'slide_width': first_width,
+        'slide_height': first_height,
+        'total_slides': len(merged_slides),
+        'template_types': TEMPLATE_NAMES,
+        'slides': merged_slides
+    }
+
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(merged_index, f, ensure_ascii=False, indent=2)
+
+    print(f'\nMerged saved: {output_path}')
+    print(f'Total slides: {len(merged_slides)}')
+
+    from collections import Counter
+    tmpl_counts = Counter(s['template'] for s in merged_slides)
+    print('\nTemplate distribution:')
+    for tmpl, count in tmpl_counts.most_common():
+        print(f'  {tmpl} ({TEMPLATE_NAMES.get(tmpl, "?")}): {count}')
+
+    return merged_index
+
+
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print('Usage: python template_extractor.py <pptx_path> [output_json_path]')
+        print('Usage:')
+        print('  python template_extractor.py <pptx_path> [output_json_path]')
+        print('  python template_extractor.py merge <vol2.pptx> <vol3.pptx> [output_json_path]')
         sys.exit(1)
 
-    pptx_path = sys.argv[1]
-    output_path = sys.argv[2] if len(sys.argv) > 2 else 'templates/slide_index.json'
+    if sys.argv[1] == 'merge':
+        if len(sys.argv) < 4:
+            print('Usage: python template_extractor.py merge <vol2.pptx> <vol3.pptx> [output_json_path]')
+            sys.exit(1)
+        vol2_path = sys.argv[2]
+        vol3_path = sys.argv[3]
+        output_path = sys.argv[4] if len(sys.argv) > 4 else 'templates/slide_index.json'
 
-    extract_slide_index(pptx_path, output_path)
+        pptx_list = [
+            (vol2_path, TEMPLATE_MAP, 0, os.path.basename(vol2_path)),
+            (vol3_path, TEMPLATE_MAP_VOL3, 1000, os.path.basename(vol3_path)),
+        ]
+        extract_and_merge(pptx_list, output_path)
+    else:
+        pptx_path = sys.argv[1]
+        output_path = sys.argv[2] if len(sys.argv) > 2 else 'templates/slide_index.json'
+        extract_slide_index(pptx_path, output_path)

@@ -85,6 +85,8 @@ def parse_slide_block(block: str) -> Optional[Dict[str, Any]]:
                 slide['ref_slide'] = int(line.split(':', 1)[1].strip())
             except ValueError:
                 pass
+        elif line.startswith('reference_pptx:'):
+            slide['reference_pptx'] = line.split(':', 1)[1].strip()
 
     if not body_text:
         body_text = header_text if not header_match else ''
