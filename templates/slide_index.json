@@ -1,5 +1,4 @@
 {
-  "source_pptx": "merged",
   "slide_width": 7775575,
   "slide_height": 10907713,
   "total_slides": 175,
@@ -19,7 +18,7 @@
   "slides": [
     {
       "slide_number": 1,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 1,
       "template": "T3",
       "template_name": "범위/개요 (거버닝메시지)",
@@ -225,7 +224,7 @@
     },
     {
       "slide_number": 2,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 2,
       "template": "T3",
       "template_name": "범위/개요 (거버닝메시지)",
@@ -443,7 +442,7 @@
     },
     {
       "slide_number": 3,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 3,
       "template": "T1",
       "template_name": "카드형 다중 (현황분석)",
@@ -669,7 +668,7 @@
     },
     {
       "slide_number": 4,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 4,
       "template": "T0",
       "template_name": "구분페이지",
@@ -729,7 +728,7 @@
     },
     {
       "slide_number": 5,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 5,
       "template": "T1",
       "template_name": "카드형 다중 (현황분석)",
@@ -891,7 +890,7 @@
     },
     {
       "slide_number": 6,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 6,
       "template": "T1",
       "template_name": "카드형 다중 (현황분석)",
@@ -1053,7 +1052,7 @@
     },
     {
       "slide_number": 7,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 7,
       "template": "T1",
       "template_name": "카드형 다중 (현황분석)",
@@ -1295,7 +1294,7 @@
     },
     {
       "slide_number": 8,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 8,
       "template": "T1",
       "template_name": "카드형 다중 (현황분석)",
@@ -1433,7 +1432,7 @@
     },
     {
       "slide_number": 9,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 9,
       "template": "T0",
       "template_name": "구분페이지",
@@ -1493,7 +1492,7 @@
     },
     {
       "slide_number": 10,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 10,
       "template": "T0",
       "template_name": "구분페이지",
@@ -1539,7 +1538,7 @@
     },
     {
       "slide_number": 11,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 11,
       "template": "T14",
       "template_name": "기타/특수",
@@ -1689,7 +1688,7 @@
     },
     {
       "slide_number": 12,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 12,
       "template": "T14",
       "template_name": "기타/특수",
@@ -1789,7 +1788,7 @@
     },
     {
       "slide_number": 13,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 13,
       "template": "T8",
       "template_name": "이미지중심",
@@ -2309,7 +2308,7 @@
     },
     {
       "slide_number": 14,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 14,
       "template": "T14",
       "template_name": "기타/특수",
@@ -2567,7 +2566,7 @@
     },
     {
       "slide_number": 15,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 15,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -3160,7 +3159,7 @@
     },
     {
       "slide_number": 16,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 16,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -3538,7 +3537,7 @@
     },
     {
       "slide_number": 17,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 17,
       "template": "T0",
       "template_name": "구분페이지",
@@ -3594,7 +3593,7 @@
     },
     {
       "slide_number": 18,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 18,
       "template": "T1",
       "template_name": "카드형 다중 (현황분석)",
@@ -4180,7 +4179,7 @@
     },
     {
       "slide_number": 19,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 19,
       "template": "T0",
       "template_name": "구분페이지",
@@ -4240,7 +4239,7 @@
     },
     {
       "slide_number": 20,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 20,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -4684,7 +4683,7 @@
     },
     {
       "slide_number": 21,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 21,
       "template": "T0",
       "template_name": "구분페이지",
@@ -4751,7 +4750,7 @@
     },
     {
       "slide_number": 22,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 22,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -4917,7 +4916,7 @@
     },
     {
       "slide_number": 23,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 23,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -5043,7 +5042,7 @@
     },
     {
       "slide_number": 24,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 24,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -5404,7 +5403,7 @@
     },
     {
       "slide_number": 25,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 25,
       "template": "T14",
       "template_name": "기타/특수",
@@ -5642,7 +5641,7 @@
     },
     {
       "slide_number": 26,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 26,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -6278,7 +6277,7 @@
     },
     {
       "slide_number": 27,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 27,
       "template": "T8",
       "template_name": "이미지중심",
@@ -6848,7 +6847,7 @@
     },
     {
       "slide_number": 28,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 28,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -7005,7 +7004,7 @@
     },
     {
       "slide_number": 29,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 29,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -7275,7 +7274,7 @@
     },
     {
       "slide_number": 30,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 30,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -7464,7 +7463,7 @@
     },
     {
       "slide_number": 31,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 31,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -7840,7 +7839,7 @@
     },
     {
       "slide_number": 32,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 32,
       "template": "T0",
       "template_name": "구분페이지",
@@ -7910,7 +7909,7 @@
     },
     {
       "slide_number": 33,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 33,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -8150,7 +8149,7 @@
     },
     {
       "slide_number": 34,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 34,
       "template": "T0",
       "template_name": "구분페이지",
@@ -8210,7 +8209,7 @@
     },
     {
       "slide_number": 35,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 35,
       "template": "T0",
       "template_name": "구분페이지",
@@ -8270,7 +8269,7 @@
     },
     {
       "slide_number": 36,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 36,
       "template": "T0",
       "template_name": "구분페이지",
@@ -8330,7 +8329,7 @@
     },
     {
       "slide_number": 37,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 37,
       "template": "T0",
       "template_name": "구분페이지",
@@ -8390,7 +8389,7 @@
     },
     {
       "slide_number": 38,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 38,
       "template": "T0",
       "template_name": "구분페이지",
@@ -8464,7 +8463,7 @@
     },
     {
       "slide_number": 39,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 39,
       "template": "T0",
       "template_name": "구분페이지",
@@ -8510,7 +8509,7 @@
     },
     {
       "slide_number": 40,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 40,
       "template": "T8",
       "template_name": "이미지중심",
@@ -9024,7 +9023,7 @@
     },
     {
       "slide_number": 41,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 41,
       "template": "T14",
       "template_name": "기타/특수",
@@ -9196,7 +9195,7 @@
     },
     {
       "slide_number": 42,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 42,
       "template": "T0",
       "template_name": "구분페이지",
@@ -9256,7 +9255,7 @@
     },
     {
       "slide_number": 43,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 43,
       "template": "T5",
       "template_name": "테이블+다이어그램",
@@ -9678,7 +9677,7 @@
     },
     {
       "slide_number": 44,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 44,
       "template": "T5",
       "template_name": "테이블+다이어그램",
@@ -10017,7 +10016,7 @@
     },
     {
       "slide_number": 45,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 45,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -10489,7 +10488,7 @@
     },
     {
       "slide_number": 46,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 46,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -10763,7 +10762,7 @@
     },
     {
       "slide_number": 47,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 47,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -10943,7 +10942,7 @@
     },
     {
       "slide_number": 48,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 48,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -11155,7 +11154,7 @@
     },
     {
       "slide_number": 49,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 49,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -11402,7 +11401,7 @@
     },
     {
       "slide_number": 50,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 50,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -11549,7 +11548,7 @@
     },
     {
       "slide_number": 51,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 51,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -11667,7 +11666,7 @@
     },
     {
       "slide_number": 52,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 52,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -11797,7 +11796,7 @@
     },
     {
       "slide_number": 53,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 53,
       "template": "T5",
       "template_name": "테이블+다이어그램",
@@ -12256,7 +12255,7 @@
     },
     {
       "slide_number": 54,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 54,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -12722,7 +12721,7 @@
     },
     {
       "slide_number": 55,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 55,
       "template": "T8",
       "template_name": "이미지중심",
@@ -12860,7 +12859,7 @@
     },
     {
       "slide_number": 56,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 56,
       "template": "T0",
       "template_name": "구분페이지",
@@ -12906,7 +12905,7 @@
     },
     {
       "slide_number": 57,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 57,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -13157,7 +13156,7 @@
     },
     {
       "slide_number": 58,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 58,
       "template": "T14",
       "template_name": "기타/특수",
@@ -13241,7 +13240,7 @@
     },
     {
       "slide_number": 59,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 59,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -13423,7 +13422,7 @@
     },
     {
       "slide_number": 60,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 60,
       "template": "T0",
       "template_name": "구분페이지",
@@ -13480,7 +13479,7 @@
     },
     {
       "slide_number": 61,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 61,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -13719,7 +13718,7 @@
     },
     {
       "slide_number": 62,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 62,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -13927,7 +13926,7 @@
     },
     {
       "slide_number": 63,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 63,
       "template": "T14",
       "template_name": "기타/특수",
@@ -14059,7 +14058,7 @@
     },
     {
       "slide_number": 64,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 64,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -14363,7 +14362,7 @@
     },
     {
       "slide_number": 65,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 65,
       "template": "T0",
       "template_name": "구분페이지",
@@ -14451,7 +14450,7 @@
     },
     {
       "slide_number": 66,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 66,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -14572,7 +14571,7 @@
     },
     {
       "slide_number": 67,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 67,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -14693,7 +14692,7 @@
     },
     {
       "slide_number": 68,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 68,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -14814,7 +14813,7 @@
     },
     {
       "slide_number": 69,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 69,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -14935,7 +14934,7 @@
     },
     {
       "slide_number": 70,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 70,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -15073,7 +15072,7 @@
     },
     {
       "slide_number": 71,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 71,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -15475,7 +15474,7 @@
     },
     {
       "slide_number": 72,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 72,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -16013,7 +16012,7 @@
     },
     {
       "slide_number": 73,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 73,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -16230,7 +16229,7 @@
     },
     {
       "slide_number": 74,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 74,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -16549,7 +16548,7 @@
     },
     {
       "slide_number": 75,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 75,
       "template": "T0",
       "template_name": "구분페이지",
@@ -16609,7 +16608,7 @@
     },
     {
       "slide_number": 76,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 76,
       "template": "T8",
       "template_name": "이미지중심",
@@ -17153,7 +17152,7 @@
     },
     {
       "slide_number": 77,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 77,
       "template": "T2",
       "template_name": "카드+다이어그램 (목적/전략)",
@@ -17344,7 +17343,7 @@
     },
     {
       "slide_number": 78,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 78,
       "template": "T1",
       "template_name": "카드형 다중 (현황분석)",
@@ -17533,7 +17532,7 @@
     },
     {
       "slide_number": 79,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 79,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -17644,7 +17643,7 @@
     },
     {
       "slide_number": 80,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 80,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -17799,7 +17798,7 @@
     },
     {
       "slide_number": 81,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 81,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -17900,7 +17899,7 @@
     },
     {
       "slide_number": 82,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 82,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -18338,7 +18337,7 @@
     },
     {
       "slide_number": 83,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 83,
       "template": "T14",
       "template_name": "기타/특수",
@@ -18422,7 +18421,7 @@
     },
     {
       "slide_number": 84,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 84,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -18702,7 +18701,7 @@
     },
     {
       "slide_number": 85,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 85,
       "template": "T0",
       "template_name": "구분페이지",
@@ -18776,7 +18775,7 @@
     },
     {
       "slide_number": 86,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 86,
       "template": "T14",
       "template_name": "기타/특수",
@@ -18930,7 +18929,7 @@
     },
     {
       "slide_number": 87,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 87,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -19448,7 +19447,7 @@
     },
     {
       "slide_number": 88,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 88,
       "template": "T0",
       "template_name": "구분페이지",
@@ -19519,7 +19518,7 @@
     },
     {
       "slide_number": 89,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 89,
       "template": "T5",
       "template_name": "테이블+다이어그램",
@@ -20178,7 +20177,7 @@
     },
     {
       "slide_number": 90,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 90,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -20327,7 +20326,7 @@
     },
     {
       "slide_number": 91,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 91,
       "template": "T8",
       "template_name": "이미지중심",
@@ -20867,7 +20866,7 @@
     },
     {
       "slide_number": 92,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 92,
       "template": "T5",
       "template_name": "테이블+다이어그램",
@@ -21686,7 +21685,7 @@
     },
     {
       "slide_number": 93,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 93,
       "template": "T8",
       "template_name": "이미지중심",
@@ -21838,7 +21837,7 @@
     },
     {
       "slide_number": 94,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 94,
       "template": "T0",
       "template_name": "구분페이지",
@@ -21884,7 +21883,7 @@
     },
     {
       "slide_number": 95,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 95,
       "template": "T0",
       "template_name": "구분페이지",
@@ -21944,7 +21943,7 @@
     },
     {
       "slide_number": 96,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 96,
       "template": "T5",
       "template_name": "테이블+다이어그램",
@@ -22503,7 +22502,7 @@
     },
     {
       "slide_number": 97,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 97,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -22715,7 +22714,7 @@
     },
     {
       "slide_number": 98,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 98,
       "template": "T8",
       "template_name": "이미지중심",
@@ -24251,7 +24250,7 @@
     },
     {
       "slide_number": 99,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 99,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -24521,7 +24520,7 @@
     },
     {
       "slide_number": 100,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 100,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -24853,7 +24852,7 @@
     },
     {
       "slide_number": 101,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 101,
       "template": "T14",
       "template_name": "기타/특수",
@@ -24961,7 +24960,7 @@
     },
     {
       "slide_number": 102,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 102,
       "template": "T5",
       "template_name": "테이블+다이어그램",
@@ -25377,7 +25376,7 @@
     },
     {
       "slide_number": 103,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 103,
       "template": "T14",
       "template_name": "기타/특수",
@@ -25495,7 +25494,7 @@
     },
     {
       "slide_number": 104,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 104,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -25899,7 +25898,7 @@
     },
     {
       "slide_number": 105,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 105,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -26062,7 +26061,7 @@
     },
     {
       "slide_number": 106,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 106,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -26246,7 +26245,7 @@
     },
     {
       "slide_number": 107,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 107,
       "template": "T5",
       "template_name": "테이블+다이어그램",
@@ -26792,7 +26791,7 @@
     },
     {
       "slide_number": 108,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 108,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -27602,7 +27601,7 @@
     },
     {
       "slide_number": 109,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 109,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -27778,7 +27777,7 @@
     },
     {
       "slide_number": 110,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 110,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -28095,7 +28094,7 @@
     },
     {
       "slide_number": 111,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 111,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -28341,7 +28340,7 @@
     },
     {
       "slide_number": 112,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 112,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -28578,7 +28577,7 @@
     },
     {
       "slide_number": 113,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 113,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -29190,7 +29189,7 @@
     },
     {
       "slide_number": 114,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 114,
       "template": "T14",
       "template_name": "기타/특수",
@@ -29342,7 +29341,7 @@
     },
     {
       "slide_number": 115,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 115,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -29495,7 +29494,7 @@
     },
     {
       "slide_number": 116,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 116,
       "template": "T8",
       "template_name": "이미지중심",
@@ -30267,7 +30266,7 @@
     },
     {
       "slide_number": 117,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 117,
       "template": "T5",
       "template_name": "테이블+다이어그램",
@@ -31238,7 +31237,7 @@
     },
     {
       "slide_number": 118,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 118,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -31922,7 +31921,7 @@
     },
     {
       "slide_number": 119,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 119,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -33074,7 +33073,7 @@
     },
     {
       "slide_number": 120,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 120,
       "template": "T14",
       "template_name": "기타/특수",
@@ -33182,7 +33181,7 @@
     },
     {
       "slide_number": 121,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 121,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -33486,7 +33485,7 @@
     },
     {
       "slide_number": 122,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 122,
       "template": "T5",
       "template_name": "테이블+다이어그램",
@@ -33878,7 +33877,7 @@
     },
     {
       "slide_number": 123,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 123,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -34126,7 +34125,7 @@
     },
     {
       "slide_number": 124,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 124,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -34282,7 +34281,7 @@
     },
     {
       "slide_number": 125,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 125,
       "template": "T8",
       "template_name": "이미지중심",
@@ -35194,7 +35193,7 @@
     },
     {
       "slide_number": 126,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 126,
       "template": "T5",
       "template_name": "테이블+다이어그램",
@@ -36945,7 +36944,7 @@
     },
     {
       "slide_number": 127,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 127,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -37080,7 +37079,7 @@
     },
     {
       "slide_number": 128,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx",
+      "source_pptx": "vol2",
       "source_slide": 128,
       "template": "T4",
       "template_name": "다중 데이터테이블",
@@ -37203,7 +37202,7 @@
     },
     {
       "slide_number": 1001,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 1,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -37423,7 +37422,7 @@
     },
     {
       "slide_number": 1002,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 2,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -37785,7 +37784,7 @@
     },
     {
       "slide_number": 1003,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 3,
       "template": "T0",
       "template_name": "구분페이지",
@@ -37851,7 +37850,7 @@
     },
     {
       "slide_number": 1004,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 4,
       "template": "T0",
       "template_name": "구분페이지",
@@ -37921,7 +37920,7 @@
     },
     {
       "slide_number": 1005,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 5,
       "template": "T0",
       "template_name": "구분페이지",
@@ -37969,7 +37968,7 @@
     },
     {
       "slide_number": 1006,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 6,
       "template": "T1",
       "template_name": "카드형 다중 (현황분석)",
@@ -38258,7 +38257,7 @@
     },
     {
       "slide_number": 1007,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 7,
       "template": "T0",
       "template_name": "구분페이지",
@@ -38476,7 +38475,7 @@
     },
     {
       "slide_number": 1008,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 8,
       "template": "T0",
       "template_name": "구분페이지",
@@ -38536,7 +38535,7 @@
     },
     {
       "slide_number": 1009,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 9,
       "template": "T0",
       "template_name": "구분페이지",
@@ -38596,7 +38595,7 @@
     },
     {
       "slide_number": 1010,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 10,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -38980,7 +38979,7 @@
     },
     {
       "slide_number": 1011,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 11,
       "template": "T0",
       "template_name": "구분페이지",
@@ -39026,7 +39025,7 @@
     },
     {
       "slide_number": 1012,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 12,
       "template": "T5",
       "template_name": "테이블+다이어그램",
@@ -39514,7 +39513,7 @@
     },
     {
       "slide_number": 1013,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 13,
       "template": "T0",
       "template_name": "구분페이지",
@@ -39560,7 +39559,7 @@
     },
     {
       "slide_number": 1014,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 14,
       "template": "T0",
       "template_name": "구분페이지",
@@ -39627,7 +39626,7 @@
     },
     {
       "slide_number": 1015,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 15,
       "template": "T1",
       "template_name": "카드형 다중 (현황분석)",
@@ -39742,7 +39741,7 @@
     },
     {
       "slide_number": 1016,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 16,
       "template": "T0",
       "template_name": "구분페이지",
@@ -39812,7 +39811,7 @@
     },
     {
       "slide_number": 1017,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 17,
       "template": "T0",
       "template_name": "구분페이지",
@@ -39872,7 +39871,7 @@
     },
     {
       "slide_number": 1018,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 18,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -39998,7 +39997,7 @@
     },
     {
       "slide_number": 1019,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 19,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -40130,7 +40129,7 @@
     },
     {
       "slide_number": 1020,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 20,
       "template": "T0",
       "template_name": "구분페이지",
@@ -40256,7 +40255,7 @@
     },
     {
       "slide_number": 1021,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 21,
       "template": "T0",
       "template_name": "구분페이지",
@@ -40322,7 +40321,7 @@
     },
     {
       "slide_number": 1022,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 22,
       "template": "T8",
       "template_name": "이미지중심",
@@ -40658,7 +40657,7 @@
     },
     {
       "slide_number": 1023,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 23,
       "template": "T0",
       "template_name": "구분페이지",
@@ -40802,7 +40801,7 @@
     },
     {
       "slide_number": 1024,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 24,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -40968,7 +40967,7 @@
     },
     {
       "slide_number": 1025,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 25,
       "template": "T8",
       "template_name": "이미지중심",
@@ -41640,7 +41639,7 @@
     },
     {
       "slide_number": 1026,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 26,
       "template": "T0",
       "template_name": "구분페이지",
@@ -41747,7 +41746,7 @@
     },
     {
       "slide_number": 1027,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 27,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -41983,7 +41982,7 @@
     },
     {
       "slide_number": 1028,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 28,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -42116,7 +42115,7 @@
     },
     {
       "slide_number": 1029,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 29,
       "template": "T0",
       "template_name": "구분페이지",
@@ -42162,7 +42161,7 @@
     },
     {
       "slide_number": 1030,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 30,
       "template": "T3",
       "template_name": "범위/개요 (거버닝메시지)",
@@ -42366,7 +42365,7 @@
     },
     {
       "slide_number": 1031,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 31,
       "template": "T0",
       "template_name": "구분페이지",
@@ -42456,7 +42455,7 @@
     },
     {
       "slide_number": 1032,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 32,
       "template": "T0",
       "template_name": "구분페이지",
@@ -42516,7 +42515,7 @@
     },
     {
       "slide_number": 1033,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 33,
       "template": "T8",
       "template_name": "이미지중심",
@@ -42756,7 +42755,7 @@
     },
     {
       "slide_number": 1034,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 34,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -42866,7 +42865,7 @@
     },
     {
       "slide_number": 1035,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 35,
       "template": "T0",
       "template_name": "구분페이지",
@@ -42974,7 +42973,7 @@
     },
     {
       "slide_number": 1036,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 36,
       "template": "T0",
       "template_name": "구분페이지",
@@ -43102,7 +43101,7 @@
     },
     {
       "slide_number": 1037,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 37,
       "template": "T6",
       "template_name": "순수 데이터테이블",
@@ -43198,7 +43197,7 @@
     },
     {
       "slide_number": 1038,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 38,
       "template": "T0",
       "template_name": "구분페이지",
@@ -43326,7 +43325,7 @@
     },
     {
       "slide_number": 1039,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 39,
       "template": "T0",
       "template_name": "구분페이지",
@@ -43410,7 +43409,7 @@
     },
     {
       "slide_number": 1040,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 40,
       "template": "T8",
       "template_name": "이미지중심",
@@ -43650,7 +43649,7 @@
     },
     {
       "slide_number": 1041,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 41,
       "template": "T7",
       "template_name": "테이블+설명shape (프로세스)",
@@ -43832,7 +43831,7 @@
     },
     {
       "slide_number": 1042,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 42,
       "template": "T0",
       "template_name": "구분페이지",
@@ -43916,7 +43915,7 @@
     },
     {
       "slide_number": 1043,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 43,
       "template": "T0",
       "template_name": "구분페이지",
@@ -44035,7 +44034,7 @@
     },
     {
       "slide_number": 1044,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 44,
       "template": "T0",
       "template_name": "구분페이지",
@@ -44115,7 +44114,7 @@
     },
     {
       "slide_number": 1045,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 45,
       "template": "T0",
       "template_name": "구분페이지",
@@ -44175,7 +44174,7 @@
     },
     {
       "slide_number": 1046,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 46,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
@@ -44489,7 +44488,7 @@
     },
     {
       "slide_number": 1047,
-      "source_pptx": "우즈베키스탄_사이버대학 설립 PMC_Ⅲ.사업관리 부문_v1.pptx",
+      "source_pptx": "vol3",
       "source_slide": 47,
       "template": "T9",
       "template_name": "핵심메시지/다이어그램",
