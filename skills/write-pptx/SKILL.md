@@ -1,13 +1,14 @@
 ---
 name: write-pptx
 description: 마크다운 텍스트를 회사 표준 템플릿에 맞춰 PowerPoint 프레젠테이션으로 변환합니다. "PPTX 만들어줘", "슬라이드로 변환", "프레젠테이션 생성", "제안서 PPT" 등의 요청 시 사용합니다.
-version: 1.0.0
-allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__list_templates, mcp__pptx_vertical_writer__create_pptx, mcp__pptx_vertical_writer__analyze_template]
+version: 2.0.0
+allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__list_templates, mcp__pptx_vertical_writer__create_pptx, mcp__pptx_vertical_writer__add_template]
 ---
 
-# PPTX 제안서 작성 스킬
+# PPTX 변환 스킬
 
 당신은 마크다운 텍스트를 회사 표준 PowerPoint 템플릿에 맞춰 프레젠테이션으로 변환하는 전문가입니다.
+프로젝트 폴더의 `docs/T?.md`를 참조하여 정확한 슬라이드 매칭을 수행합니다.
 
 ## 워크플로우
 
@@ -15,74 +16,51 @@ allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__list_templat
 - 사용자가 제공한 마크다운 파일 또는 텍스트를 읽습니다
 - `# 헤딩` 구조를 분석하여 섹션 목록을 파악합니다
 
-### 2단계: 템플릿 확인
-- `mcp__pptx_vertical_writer__list_templates()`를 호출하여 사용 가능한 템플릿 목록을 확인합니다
-- 사용자에게 어떤 템플릿들이 있는지 간략히 안내합니다
+### 2단계: 템플릿 MD 읽기
+- `docs/GUIDE.md`를 읽어 전체 템플릿 구조를 파악합니다
+- 각 섹션에 맞는 `docs/T?.md`를 읽어 ref_slide를 선택합니다
 
 ### 3단계: 섹션별 템플릿 배정
-각 섹션의 내용을 분석하여 최적의 템플릿을 배정합니다:
+각 섹션의 내용을 분석하여 최적의 템플릿과 ref_slide를 배정합니다:
 
-| 내용 특성 | 추천 템플릿 | 이유 |
+| 내용 특성 | 추천 | ref_slide 선택 기준 |
 |---|---|---|
-| 섹션 제목만 (본문 2줄 이하) | **T0** (구분페이지) | 챕터 구분용 |
-| ### 소제목 2개 이상 | **T1** (카드형) | 소제목→카드 제목, 본문→카드 내용 |
-| 마크다운 테이블 (10줄 이상) | **T6** (데이터테이블) | 큰 테이블 전용 |
-| 마크다운 테이블 (10줄 미만) | **T7** (테이블+설명) | 테이블 + 보충 설명 |
-| 핵심 문구 3~5개 | **T9** (핵심메시지) | 라벨형 레이아웃 |
-| 긴 본문 (4문단 이상) | **T9** x 여러 장 | 4문단씩 분할 |
+| 섹션 제목만 | T0 | 아무 T0 슬라이드 |
+| 소제목 2~6개 | T1 | 카드 수가 맞는 슬라이드 |
+| 마크다운 테이블 (대형) | T6 | 테이블 크기가 맞는 슬라이드 |
+| 마크다운 테이블 + 설명 | T7 | 콘텐츠 영역이 있는 슬라이드 |
+| 핵심 문구 3~6개 | T9 | content 수가 맞는 슬라이드 |
 
 ### 4단계: 확장 MD 생성
-배정된 템플릿에 맞춰 확장 마크다운을 생성합니다.
+`docs/T?.md`에서 해당 ref_slide의 **복사용 스니펫**을 가져와 내용을 채웁니다.
 
-#### 확장 MD 포맷
 ```markdown
 ---config
-reference_pptx: templates/placeholder.pptx
+reference_pptx: templates/placeholder_vol2.pptx
 ---
 
 ---slide
 # [S001] 섹션 제목
 template: T1
-ref_slide: 5
+ref_slide: 8
 ---
-@governing_message: 이 슬라이드의 핵심 메시지 (1~2문장)
-@breadcrumb: 섹션 경로 (예: 1-1. 사업이해도 > 1-1-5. 현황)
-@카드1_제목: 첫 번째 카드 제목
-@카드1_내용: 첫 번째 카드 본문 (2~4문장)
-@카드2_제목: 두 번째 카드 제목
-@카드2_내용: 두 번째 카드 본문
-@content_1: 상단 요약 텍스트
+@governing_message: 핵심 메시지
+@breadcrumb: 섹션 경로
+@카드1_제목: 카드 제목
+@카드1_내용: 카드 본문
 ```
 
-#### 필드 규칙
-- `@governing_message`: 슬라이드 상단 핵심 메시지 (1~2문장, 200자 이내)
-- `@breadcrumb`: 섹션 경로 표시
-- `@카드N_제목`: 카드 제목 (N=1~6)
-- `@카드N_내용`: 카드 본문 (2~4문장, 300자 이내)
-- `@content_N`: 일반 텍스트 영역 (N=1~6)
-- `@heading_N`: 소제목 영역
-- `@label_N`: 라벨 텍스트
-- `@section_title_N`: 섹션 타이틀
-
-#### 참조 슬라이드 번호 (ref_slide)
-자주 쓰는 대표 슬라이드:
-- T0: 17, 39, 56, 94
-- T1: 5, 6, 7, 8, 78
-- T6: 22, 34, 35, 60
-- T7: 20, 28, 33
-- T9: 16, 29, 47, 62
-
 ### 5단계: 사용자 확인
-- 생성된 확장 MD의 슬라이드 목록(번호, 템플릿, 제목)을 사용자에게 보여줍니다
+- 생성된 확장 MD의 슬라이드 목록을 사용자에게 보여줍니다
 - 템플릿 변경이나 내용 수정 요청을 반영합니다
 
 ### 6단계: PPTX 생성
 - 확장 MD 파일을 저장합니다
-- `mcp__pptx_vertical_writer__create_pptx(extended_md=확장MD텍스트, output_file="결과.pptx")`를 호출합니다
+- `mcp__pptx_vertical_writer__create_pptx(extended_md=텍스트, project_dir=경로)`를 호출합니다
 - 생성된 파일 경로를 사용자에게 알려줍니다
 
 ## 주의사항
 - PowerPoint가 설치된 Windows 환경에서만 동작합니다
 - 긴 문장은 300자 이내로 요약하여 슬라이드에 적합하게 만듭니다
-- 마크다운 테이블은 그대로 유지합니다
-- 이미지는 현재 텍스트 교체만 지원하므로, 이미지 삽입이 필요한 경우 안내합니다
+- ref_slide 선택 시 반드시 T?.md의 shape 구성(카드 수, 테이블 수)을 확인합니다
+- MCP 도구 호출은 한 턴에 1회만 합니다

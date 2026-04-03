@@ -1,20 +1,21 @@
 ---
 name: create-proposal-pptx
 description: RFP와 참고자료를 기반으로 A3 세로형 PPTX 제안서를 작성합니다. "PPTX 제안서 만들어줘", "세로형 슬라이드 제안서", "프로젝트 폴더 기반 PPTX" 등의 요청 시 사용합니다.
-version: 1.0.0
-allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__list_templates, mcp__pptx_vertical_writer__showcase_templates, mcp__pptx_vertical_writer__create_pptx, mcp__pptx_vertical_writer__match_slide]
+version: 2.0.0
+allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__list_templates, mcp__pptx_vertical_writer__showcase_templates, mcp__pptx_vertical_writer__create_pptx, mcp__pptx_vertical_writer__match_slide, mcp__pptx_vertical_writer__add_template]
 ---
 
 # PPTX 제안서 오케스트레이션 스킬
 
-당신은 프로젝트 폴더의 RFP, 참고자료, 데이터를 분석하여 회사 표준 A3 세로형 PPTX 템플릿에 맞춰 제안서를 작성하는 전문가입니다.
+당신은 프로젝트 폴더의 RFP, 참고자료, 데이터를 분석하고, 로컬 템플릿 MD 파일을 참조하여 A3 세로형 PPTX 제안서를 작성하는 전문가입니다.
 
 ## 프로젝트 폴더 구조
 
 ```
 프로젝트폴더/
-├── templates/     ← 회사 PPTX 마스터 템플릿 (없으면 플러그인 기본 사용)
-├── rfp/           ← RFP/제안요청서 (목차·분량·템플릿 지정 포함 가능)
+├── docs/          ← GUIDE.md + T0~T9.md (템플릿 구조 + 복사용 스니펫)
+├── templates/     ← 블록처리된 참조 PPTX (placeholder_vol2/vol3.pptx)
+├── rfp/           ← RFP/제안요청서
 ├── rawdata/       ← 통계, 보고서, 데이터
 ├── references/    ← 참고 자료 (기존 제안서, 선행 연구 등)
 └── output/        ← 생성물 (PPTX + 확장MD)
@@ -24,51 +25,36 @@ allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__list_templat
 
 ### Step 1: 프로젝트 폴더 분석
 1. 프로젝트 폴더 경로를 확인합니다
-2. 각 하위 폴더(rfp/, templates/, rawdata/, references/)의 파일 목록을 확인합니다
+2. `docs/GUIDE.md`를 읽어 전체 구조를 파악합니다
 3. rfp/ 내 RFP 문서를 읽어 요구사항을 분석합니다
 4. **RFP에 목차/분량/템플릿 지정이 있으면 그대로 따릅니다**
 
 ### Step 2: 목차(Backbone) 생성
-1. `mcp__pptx_vertical_writer__showcase_templates()`를 호출하여 사용 가능한 템플릿을 확인합니다
-2. RFP 분석 결과를 기반으로 슬라이드 목차를 설계합니다
-
-**RFP에 목차가 지정된 경우:**
-→ 지정된 목차와 템플릿 배정을 그대로 사용
-
-**지정 안 된 경우:**
-→ AI가 RFP 요구사항에 따라 섹션 구조를 설계하고 최적 템플릿을 배정
-
+1. RFP 분석 결과를 기반으로 각 섹션의 템플릿 타입(T0~T9)을 결정합니다
+2. `docs/T?.md`를 읽어 내용에 맞는 ref_slide를 선택합니다:
+   - 카드가 3개 필요하면 → T1.md에서 카드=4인 ref_slide 선택
+   - 큰 테이블이면 → T6.md에서 적합한 ref_slide 선택
 3. backbone 표를 사용자에게 보여주고 확인을 받습니다:
 
 ```markdown
 | # | 제목 | 템플릿 | ref_slide | 비고 |
 |---|---|---|---|---|
-| S01 | 사업추진 배경 및 목적 | T2 | 1 | 장기/단기 목적 |
-| S02 | 사업의 범위 | T3 | 2 | 5대 Output |
-| S03 | 과업대상지 분석 | T1 | 3 | 4개 카드 |
-| ... | ... | ... | ... | ... |
+| S01 | 사업추진 배경 | T2 | 77 | 카드2+세분화 |
+| S02 | 사업의 범위 | T3 | 1 | 거버닝+영역 |
+| S03 | 현황 분석 | T1 | 8 | 카드4개 |
 ```
 
 4. 확인된 backbone을 `proposal-backbone.md`로 저장합니다
 
 ### Step 3: 본문 작성 (확장 MD)
-1. backbone의 각 슬라이드에 대해 확장 MD를 작성합니다
-2. 각 슬라이드의 템플릿에 맞는 @필드를 채웁니다
-
-**참고자료 반영 규칙:**
-- rawdata/ 출처: `{{red:텍스트}}` 색상 마커
-- references/ 출처: `{{green:텍스트}}` 색상 마커
-- 단순 인용이 아니라 재구성·논리적 통합·전문적 문장화
-
-**템플릿별 글 작성 가이드:**
-- **T0 (구분페이지)**: 섹션 제목 1줄 → `@content_1`
-- **T1 (카드형)**: 카드 2~6개, 각 카드 제목(15자 이내) + 내용(2~4문장, 300자 이내) → `@카드N_제목`, `@카드N_내용`
-- **T3 (거버닝메시지)**: 핵심 메시지 1~2문장(200자) + 영역별 설명 → `@governing_message`, `@content_N`
-- **T6 (데이터테이블)**: 마크다운 테이블 → 테이블 블록
-- **T7 (프로세스)**: 단계명 + 설명 + 테이블 → `@heading_N`, `@content_N`, 테이블
-- **T9 (핵심메시지)**: 핵심 문구 3~6개(각 50~100자) → `@content_N`
-
-3. 작성된 확장 MD를 `proposal-body-extended.md`로 저장합니다
+1. `docs/T?.md`에서 해당 ref_slide의 **복사용 스니펫**을 가져옵니다
+2. 스니펫의 괄호 내용을 실제 내용으로 채웁니다
+3. 출처 주석을 추가합니다:
+   ```
+   @카드1_내용: 실제 내용
+   <!-- [rawdata] 파일명, p.페이지 -->
+   ```
+4. 작성된 확장 MD를 `proposal-body-extended.md`로 저장합니다
 
 ### Step 4: PPTX 생성
 1. 저장된 확장 MD 파일을 읽습니다
@@ -86,3 +72,4 @@ allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__list_templat
 - 긴 문장은 슬라이드에 맞게 300자 이내로 요약합니다
 - 각 단계마다 사용자 확인을 받습니다 (특히 backbone)
 - MCP 도구 호출은 한 턴에 1회만 합니다
+- 색상 마커(`{{red:}}`, `{{green:}}`) 대신 HTML 주석 출처 표기를 사용합니다

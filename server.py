@@ -31,6 +31,125 @@ TEMPLATE_IMAGES_DIR = BASE_DIR / "template-images" / "all-slides"
 # 내부 유틸리티
 # ---------------------------------------------------------------------------
 
+TEMPLATE_NAMES_MAP = {
+    'T0': '구분페이지', 'T1': '카드형 다중', 'T2': '카드+다이어그램',
+    'T3': '범위/개요', 'T4': '다중 데이터테이블', 'T5': '테이블+다이어그램',
+    'T6': '순수 데이터테이블', 'T7': '프로세스+테이블', 'T8': '이미지중심',
+    'T9': '핵심메시지/다이어그램',
+}
+
+
+def _build_snippet(tmpl, slide_info):
+    """ref_slide용 복사 스니펫 생성"""
+    rm = slide_info.get('role_map', {})
+    sn = slide_info['slide_number']
+    lines = [
+        '---slide',
+        '# [SXXX] (제목)',
+        f'template: {tmpl}',
+        f'ref_slide: {sn}',
+    ]
+    if sn >= 1000:
+        lines.append('reference_pptx: templates/placeholder_vol3.pptx')
+    lines.append('---')
+
+    if tmpl != 'T0':
+        lines.append('@governing_message: (핵심 메시지, 200자)')
+        lines.append('@breadcrumb: (섹션 경로)')
+
+    if tmpl == 'T0':
+        lines.append('@content_1: (섹션 제목)')
+    elif tmpl in ('T1', 'T2'):
+        cards = len(rm.get('card_table', []))
+        content = len(rm.get('content_box', []) + rm.get('content_shape', []))
+        if content > 0:
+            lines.append('@content_1: (상단 요약 텍스트)')
+        for i in range(1, cards + 1):
+            lines.append(f'@카드{i}_제목: (카드{i} 제목, 15자)')
+            lines.append(f'@카드{i}_내용: (카드{i} 본문, 300자)')
+    elif tmpl == 'T3':
+        content = len(rm.get('content_box', []) + rm.get('content_shape', []))
+        lines.append('@heading_1: (핵심 문구)')
+        for i in range(1, min(max(content, 3) + 1, 7)):
+            lines.append(f'@content_{i}: (영역{i} 설명)')
+    elif tmpl in ('T4', 'T5', 'T6'):
+        dtbl = len(rm.get('data_table', []))
+        lines.append('')
+        for i in range(1, max(dtbl, 1) + 1):
+            lines.extend(['| 항목 | 내용 | 비고 |', '|---|---|---|', '| ... | ... | ... |'])
+            if i < max(dtbl, 1):
+                lines.append('')
+        if tmpl == 'T5':
+            content = len(rm.get('content_box', []) + rm.get('content_shape', []))
+            for i in range(1, min(content + 1, 4)):
+                lines.append(f'@content_{i}: (설명 텍스트)')
+    elif tmpl == 'T7':
+        content = len(rm.get('content_box', []) + rm.get('content_shape', []))
+        headings = len(rm.get('heading_box', []))
+        for i in range(1, max(headings, 1) + 1):
+            lines.append(f'@heading_{i}: (단계{i} 제목)')
+        for i in range(1, min(max(content, 1) + 1, 4)):
+            lines.append(f'@content_{i}: (단계{i} 설명)')
+        lines.extend(['', '| 항목 | 내용 | 비고 |', '|---|---|---|', '| ... | ... | ... |'])
+    elif tmpl == 'T8':
+        lines.append('@content_1: (이미지 설명 - 이미지는 수작업 삽입)')
+    elif tmpl == 'T9':
+        content = len(rm.get('content_box', []) + rm.get('content_shape', []))
+        labels = len(rm.get('label_box', []) + rm.get('label_shape', []))
+        n = max(content, labels, 3)
+        for i in range(1, min(n + 1, 7)):
+            lines.append(f'@content_{i}: (핵심 문구{i}, 50~100자)')
+
+    return '\n'.join(lines)
+
+
+def _update_template_md(template_name, slide_info, docs_dir=None):
+    """템플릿 MD 파일에 새 슬라이드 스니펫 추가. 파일 없으면 생성."""
+    if docs_dir is None:
+        docs_dir = BASE_DIR / "docs"
+    docs_dir = Path(docs_dir)
+    docs_dir.mkdir(parents=True, exist_ok=True)
+
+    md_path = docs_dir / f"{template_name}.md"
+    sn = slide_info['slide_number']
+    rm = slide_info.get('role_map', {})
+    cards = len(rm.get('card_table', []))
+    dtbl = len(rm.get('data_table', []))
+    content = len(rm.get('content_box', []) + rm.get('content_shape', []))
+    src = 'II' if sn < 1000 else 'III'
+
+    snippet = _build_snippet(template_name, slide_info)
+
+    section = (
+        f"\n### ref_slide: {sn} ({src}권) — shapes:{slide_info['shape_count']}, "
+        f"카드:{cards}, 테이블:{dtbl}, 콘텐츠:{content}\n\n"
+        f"```markdown\n{snippet}\n```\n"
+    )
+
+    if md_path.exists():
+        # 기존 파일에 스니펫 추가
+        existing = md_path.read_text(encoding='utf-8')
+        # 복사용 스니펫 섹션에 추가
+        existing += section
+        md_path.write_text(existing, encoding='utf-8')
+        return f"MD 업데이트: {md_path.name}"
+    else:
+        # 새 파일 생성
+        name = TEMPLATE_NAMES_MAP.get(template_name, template_name)
+        header = (
+            f"# {template_name} — {name}\n\n"
+            f"**슬라이드 수**: 1장\n\n"
+            f"## 슬라이드 목록\n\n"
+            f"| ref_slide | 출처 | shapes | 카드 | 테이블 | 콘텐츠 | 라벨 | 이미지 |\n"
+            f"|---|---|---|---|---|---|---|---|\n"
+            f"| {sn} | {src}권 | {slide_info['shape_count']} | {cards} | {dtbl} | {content} | 0 | 0 |\n\n"
+            f"---\n\n"
+            f"## 복사용 스니펫\n"
+        )
+        md_path.write_text(header + section, encoding='utf-8')
+        return f"MD 신규 생성: {md_path.name}"
+
+
 def _resolve_output(project_dir: str, output_file: str, fallback: str = "output.pptx") -> Path:
     if project_dir:
         proj = Path(project_dir)
@@ -190,7 +309,15 @@ def create_pptx(
     """
     tmpl_dir = Path(template_dir) if template_dir else DEFAULT_TEMPLATE_DIR
     idx_path = tmpl_dir / "slide_index.json"
-    placeholder = tmpl_dir / "placeholder.pptx"
+
+    # placeholder 탐색 순서: project_dir/templates/ → plugin templates/
+    placeholder = None
+    if project_dir:
+        proj_placeholder = Path(project_dir) / "templates" / "placeholder_vol2.pptx"
+        if proj_placeholder.exists():
+            placeholder = proj_placeholder
+    if placeholder is None:
+        placeholder = tmpl_dir / "placeholder.pptx"
 
     if not idx_path.exists():
         return "오류: slide_index.json이 없습니다. analyze_template()을 먼저 실행하세요."
@@ -208,7 +335,15 @@ def create_pptx(
 
         config_ref = md_data['config'].get('reference_pptx', '')
         if not Path(config_ref).is_absolute():
-            md_data['config']['reference_pptx'] = str(BASE_DIR / config_ref)
+            # project_dir 기준으로 상대경로 해석
+            if project_dir:
+                resolved = Path(project_dir) / config_ref
+                if resolved.exists():
+                    md_data['config']['reference_pptx'] = str(resolved)
+                else:
+                    md_data['config']['reference_pptx'] = str(BASE_DIR / config_ref)
+            else:
+                md_data['config']['reference_pptx'] = str(BASE_DIR / config_ref)
 
         slide_index = load_slide_index(str(idx_path))
 
@@ -461,13 +596,23 @@ def add_template(
         with open(DEFAULT_SLIDE_INDEX, 'w', encoding='utf-8') as f:
             json.dump(idx, f, ensure_ascii=False, indent=2)
 
+        # 템플릿 MD 파일 자동 업데이트
+        md_result = _update_template_md(template_name, {
+            'slide_number': new_slide_num,
+            'source_slide': slide_number,
+            'source_pptx': str(p.name),
+            'shape_count': len(shapes_info),
+            'role_map': role_map,
+        })
+
         return (
             f"템플릿 등록 완료!\n"
             f"  이름: {template_name}\n"
             f"  슬라이드 번호: {new_slide_num}\n"
             f"  shape 수: {len(shapes_info)}\n"
             f"  원본: {p.name} 슬라이드 #{slide_number}\n"
-            f"  slide_index.json 업데이트됨"
+            f"  slide_index.json 업데이트됨\n"
+            f"  {md_result}"
         )
 
     except Exception as e:
