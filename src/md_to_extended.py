@@ -307,6 +307,6 @@ reference_pptx: {ref_pptx_path}
 if __name__ == '__main__':
     input_path = sys.argv[1] if len(sys.argv) > 1 else 'input/proposal-body.md'
     output_path = sys.argv[2] if len(sys.argv) > 2 else 'input/proposal-body-auto.md'
-    ref_pptx = sys.argv[3] if len(sys.argv) > 3 else 'reference-ppt/우즈베키스탄_사이버대학 설립 PMC_Ⅱ.기술 부문_v2.pptx'
+    ref_pptx = sys.argv[3] if len(sys.argv) > 3 else 'templates/placeholder_vol2.pptx'
 
     convert_md_to_extended(input_path, output_path, ref_pptx)
