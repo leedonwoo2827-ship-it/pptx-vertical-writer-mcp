@@ -21,12 +21,18 @@
 ## 사용 가능한 MCP 도구
 | 도구 | 용도 |
 |---|---|
-| `list_templates()` | 템플릿 목록 (간략) |
-| `showcase_templates()` | 템플릿 쇼케이스 |
-| `match_slide(pptx, num)` | 슬라이드↔템플릿 매칭 |
-| `add_template(pptx, num, name)` | 새 템플릿 등록 + MD 자동 업데이트 |
-| `analyze_template(pptx)` | 참조 PPTX 전체 분석 |
-| `create_pptx(md, output)` | PPTX 생성 |
+| `create_pptx(md, output)` | PPTX 한번에 생성 (20장 이하용) |
+| `parse_md_slides(md_file)` | MD 파싱 → 슬라이드 목록 (COM 불필요) |
+| `build_slide(slide_md, index)` | 1장 PPTX 생성 (2~3초) |
+| `merge_slides(slide_files, output)` | 개별 PPTX 합치기 |
+
+## 대량 생성 워크플로우 (20장 초과)
+```
+1. parse_md_slides(md_file=...) → slides 목록
+2. for each slide: build_slide(slide_md=slide.slide_md, slide_index_num=slide.index)
+3. merge_slides(slide_files=[...], output_file=...)
+```
+주의: build_slide는 순차 호출 필수 (COM API 병렬 불가)
 
 ## 폴더 구조
 ```
@@ -47,5 +53,5 @@
 ```
 
 ## 참조 PPTX 번호 체계
-- ref_slide 1~128: II권 (placeholder_vol2.pptx, 기본)
-- ref_slide 1001~1047: III권 (placeholder_vol3.pptx, reference_pptx 지정 필수)
+- ref_slide 2001~2128: II권 (S2001.pptx ~ S2128.pptx)
+- ref_slide 3001~3047: III권 (S3001.pptx ~ S3047.pptx)

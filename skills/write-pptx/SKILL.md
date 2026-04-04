@@ -55,12 +55,25 @@ ref_slide: 8
 - 템플릿 변경이나 내용 수정 요청을 반영합니다
 
 ### 6단계: PPTX 생성
-- 확장 MD 파일을 저장합니다
-- `mcp__pptx_vertical_writer__create_pptx(extended_md=텍스트, project_dir=경로)`를 호출합니다
-- 생성된 파일 경로를 사용자에게 알려줍니다
+
+**방법 A — 소량 (20장 이하):**
+- `create_pptx(md_file=파일, project_dir=경로)` 1회 호출
+
+**방법 B — 대량 (20장 초과, 권장):**
+1. `parse_md_slides(md_file=파일, project_dir=경로)` → 슬라이드 목록 획득
+2. 각 슬라이드마다 `build_slide(slide_md=블록, slide_index_num=순번, project_dir=경로)` 호출
+3. 모든 개별 PPTX 생성 완료 후 `merge_slides(slide_files=파일목록JSON, output_file=파일명, project_dir=경로)` 호출
+
+## MCP 도구 목록
+| 도구 | 용도 |
+|---|---|
+| `create_pptx` | 전체 PPTX 한번에 생성 (소량용) |
+| `parse_md_slides` | MD 파싱 → 슬라이드 목록 반환 (COM 불필요, 즉시) |
+| `build_slide` | 1장 PPTX 생성 (2~3초) |
+| `merge_slides` | 개별 PPTX 합치기 |
 
 ## 주의사항
 - PowerPoint가 설치된 Windows 환경에서만 동작합니다
 - 긴 문장은 300자 이내로 요약하여 슬라이드에 적합하게 만듭니다
 - ref_slide 선택 시 반드시 T?.md의 shape 구성(카드 수, 테이블 수)을 확인합니다
-- MCP 도구 호출은 한 턴에 1회만 합니다
+- 대량 생성 시 build_slide는 순차 호출 (병렬 불가, COM 제약)

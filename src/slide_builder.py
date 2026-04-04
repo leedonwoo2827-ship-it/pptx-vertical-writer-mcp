@@ -317,6 +317,80 @@ def apply_fields_com(slide_com, slide_info: dict, fields: dict, tables: list = N
                     replace_shape_text_com(available[i], remaining[key])
 
 
+def build_single_slide(slide_data: dict, slides_info: dict, output_path: str, slides_dir: str):
+    """
+    1장짜리 PPTX 생성: 템플릿 복사 → COM으로 텍스트 교체 → 저장.
+    slide_data: parse_slide_block() 결과 (ref_slide, fields, tables 등)
+    slides_info: {slide_number: slide_info, ...}
+    """
+    ref_slide_num = slide_data.get('ref_slide')
+    if ref_slide_num is None:
+        raise ValueError('ref_slide가 지정되지 않았습니다.')
+
+    slide_file = os.path.join(slides_dir, f'S{ref_slide_num:04d}.pptx')
+    if not os.path.exists(slide_file):
+        raise FileNotFoundError(f'슬라이드 파일 없음: {slide_file}')
+
+    # 템플릿 복사
+    shutil.copy2(slide_file, output_path)
+
+    fields = slide_data.get('fields', {})
+    tables = slide_data.get('tables', [])
+    if not fields and not tables:
+        return output_path
+
+    # COM으로 열어서 텍스트 교체
+    pp = _get_powerpoint()
+    try:
+        prs = pp.Presentations.Open(os.path.abspath(output_path), WithWindow=False)
+        slide_info = slides_info.get(ref_slide_num, {})
+        apply_fields_com(prs.Slides(1), slide_info, fields, tables)
+        prs.Save()
+        prs.Close()
+    finally:
+        try:
+            pp.Quit()
+        except Exception:
+            pass
+
+    return output_path
+
+
+def merge_pptx_files_safe(part_files: list, output_path: str, batch_size: int = 30):
+    """여러 PPTX를 합치기. 파일 수가 많으면 2단계 merge."""
+    if not part_files:
+        raise ValueError('합칠 파일이 없습니다.')
+
+    if len(part_files) == 1:
+        shutil.copy2(part_files[0], output_path)
+        return
+
+    if len(part_files) <= batch_size:
+        _merge_pptx_files(list(part_files), output_path)
+        return
+
+    # 2단계 merge: batch_size씩 중간파일 생성 → 중간파일 합치기
+    intermediate_files = []
+    for i in range(0, len(part_files), batch_size):
+        batch = part_files[i:i + batch_size]
+        if len(batch) == 1:
+            intermediate_files.append(batch[0])
+            continue
+        intermediate = f'{output_path}.merge_{i}.pptx'
+        _merge_pptx_files(list(batch), intermediate)
+        intermediate_files.append(intermediate)
+
+    _merge_pptx_files(intermediate_files, output_path)
+
+    # 중간파일 정리
+    for f in intermediate_files:
+        if f != output_path and os.path.exists(f) and f not in part_files:
+            try:
+                os.remove(f)
+            except Exception:
+                pass
+
+
 BATCH_SIZE = 20  # 배치당 슬라이드 수
 
 

@@ -210,6 +210,41 @@ def parse_bullets(text: str) -> List[Dict]:
     return bullets
 
 
+def split_slide_blocks(md_text: str) -> tuple:
+    """
+    확장 MD를 파싱하여 (config, slide_blocks) 반환.
+    slide_blocks: [{index, ref_slide, template, slide_md(원본 텍스트)}, ...]
+    """
+    config = {}
+    config_match = re.search(r'---config\s*\n(.*?)\n---', md_text, re.DOTALL)
+    if config_match:
+        for line in config_match.group(1).strip().split('\n'):
+            line = line.strip()
+            if ':' in line:
+                key, val = line.split(':', 1)
+                config[key.strip()] = val.strip()
+
+    # ---slide 구분자로 분할하되 원본 텍스트 보존
+    parts = re.split(r'(---slide\s*\n(?:#\s*\[S\d+\].*\n)?)', md_text)
+
+    blocks = []
+    idx = 0
+    for i in range(len(parts)):
+        if re.match(r'---slide\s*\n', parts[i]):
+            raw_block = parts[i + 1] if i + 1 < len(parts) else ''
+            slide_data = parse_slide_block(raw_block)
+            if slide_data:
+                blocks.append({
+                    'index': idx,
+                    'ref_slide': slide_data.get('ref_slide'),
+                    'template': slide_data.get('template'),
+                    'slide_md': '---slide\n' + raw_block,
+                })
+                idx += 1
+
+    return config, blocks
+
+
 if __name__ == '__main__':
     # 테스트
     test_md = """
