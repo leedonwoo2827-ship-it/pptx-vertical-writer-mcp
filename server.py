@@ -49,7 +49,7 @@ def _build_snippet(tmpl, slide_info):
         f'template: {tmpl}',
         f'ref_slide: {sn}',
     ]
-    if sn >= 1000:
+    if sn >= 3000:
         lines.append('reference_pptx: templates/placeholder_vol3.pptx')
     lines.append('---')
 
@@ -116,7 +116,7 @@ def _update_template_md(template_name, slide_info, docs_dir=None):
     cards = len(rm.get('card_table', []))
     dtbl = len(rm.get('data_table', []))
     content = len(rm.get('content_box', []) + rm.get('content_shape', []))
-    src = 'II' if sn < 1000 else 'III'
+    src = 'II' if sn < 3000 else 'III'
 
     snippet = _build_snippet(template_name, slide_info)
 
@@ -354,8 +354,15 @@ def create_pptx(
 
         slide_index = load_slide_index(str(idx_path))
 
+        # slides_dir 탐색: project_dir/templates/slides/ 가 있으면 분할 모드 (고속)
+        slides_dir = None
+        if project_dir:
+            sd = Path(project_dir) / "templates" / "slides"
+            if sd.is_dir() and any(sd.glob("S*.pptx")):
+                slides_dir = str(sd)
+
         # PPTX 생성
-        build_presentation(md_data, slide_index, str(out_path))
+        build_presentation(md_data, slide_index, str(out_path), slides_dir=slides_dir)
 
         if out_path.exists():
             size = out_path.stat().st_size

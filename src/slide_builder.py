@@ -320,78 +320,139 @@ def apply_fields_com(slide_com, slide_info: dict, fields: dict, tables: list = N
 BATCH_SIZE = 20  # 배치당 슬라이드 수
 
 
-def _build_batch(md_slides_batch, ref_pptx_path, slides_info, output_path):
-    """배치 단위로 PPTX 생성 (PowerPoint COM 열고 닫기 포함)"""
+def _build_batch(md_slides_batch, ref_pptx_path, slides_info, output_path, slides_dir=None):
+    """배치 단위로 PPTX 생성. slides_dir이 있으면 1장짜리 파일에서 복사 (고속)."""
     import time
 
     pp = _get_powerpoint()
     try:
-        ref_prs_cache = {}
-        ref_prs = pp.Presentations.Open(ref_pptx_path, WithWindow=False)
-        ref_prs_cache[ref_pptx_path] = ref_prs
-
-        def get_ref_prs(pptx_path):
-            abs_path = os.path.abspath(pptx_path)
-            if abs_path not in ref_prs_cache:
-                if not os.path.exists(abs_path):
-                    raise FileNotFoundError(f'참조 PPTX: {abs_path}')
-                ref_prs_cache[abs_path] = pp.Presentations.Open(abs_path, WithWindow=False)
-            return ref_prs_cache[abs_path]
-
-        temp_path = output_path + '.tmp.pptx'
-        shutil.copy2(ref_pptx_path, temp_path)
-        target_prs = pp.Presentations.Open(temp_path, WithWindow=False)
-
-        for i in range(target_prs.Slides.Count, 0, -1):
-            target_prs.Slides(i).Delete()
-
         built = 0
-        for slide_data in md_slides_batch:
-            ref_slide_num = slide_data.get('ref_slide')
-            if ref_slide_num is None:
-                continue
 
-            slide_ref_pptx = slide_data.get('reference_pptx')
-            current_ref_prs = get_ref_prs(slide_ref_pptx) if slide_ref_pptx else ref_prs
+        if slides_dir and os.path.isdir(slides_dir):
+            # === 분할 모드: 1장짜리 PPTX에서 복사 (고속) ===
+            first_slide = md_slides_batch[0]
+            first_ref = first_slide.get('ref_slide', 1)
+            first_file = os.path.join(slides_dir, f'S{first_ref:04d}.pptx')
 
-            slide_info = slides_info.get(ref_slide_num, {})
-            source_slide_num = slide_info.get('source_slide', ref_slide_num)
+            if not os.path.exists(first_file):
+                raise FileNotFoundError(f'슬라이드 파일 없음: {first_file}')
 
-            if source_slide_num < 1 or source_slide_num > current_ref_prs.Slides.Count:
-                print(f'  Warning: source_slide {source_slide_num} out of range, skipping')
-                continue
+            # 첫 번째 슬라이드 파일을 복사해서 타겟으로 사용
+            temp_path = output_path + '.tmp.pptx'
+            shutil.copy2(first_file, temp_path)
+            target_prs = pp.Presentations.Open(os.path.abspath(temp_path), WithWindow=False)
 
-            for attempt in range(3):
-                try:
-                    current_ref_prs.Slides(source_slide_num).Copy()
-                    time.sleep(0.8)
-                    target_prs.Slides.Paste()
-                    break
-                except Exception as e:
-                    if attempt < 2:
-                        time.sleep(1)
-                    else:
-                        print(f'  Error copying slide {ref_slide_num}: {e}')
-
-            new_slide = target_prs.Slides(target_prs.Slides.Count)
-            fields = slide_data.get('fields', {})
-            tables = slide_data.get('tables', [])
+            # 첫 슬라이드 텍스트 교체
+            slide_info = slides_info.get(first_ref, {})
+            fields = first_slide.get('fields', {})
+            tables = first_slide.get('tables', [])
             if fields or tables:
-                apply_fields_com(new_slide, slide_info, fields, tables)
-
+                apply_fields_com(target_prs.Slides(1), slide_info, fields, tables)
             built += 1
 
-        target_prs.SaveAs(output_path, 24)  # ppSaveAsOpenXMLPresentation
-        target_prs.Close()
+            # 나머지 슬라이드를 1장씩 열어서 복사
+            for slide_data in md_slides_batch[1:]:
+                ref_slide_num = slide_data.get('ref_slide')
+                if ref_slide_num is None:
+                    continue
 
-        for cached_prs in ref_prs_cache.values():
-            try:
-                cached_prs.Close()
-            except Exception:
-                pass
+                slide_file = os.path.join(slides_dir, f'S{ref_slide_num:04d}.pptx')
+                if not os.path.exists(slide_file):
+                    print(f'  Warning: {slide_file} not found, skipping')
+                    continue
 
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
+                src_prs = pp.Presentations.Open(os.path.abspath(slide_file), WithWindow=False)
+                try:
+                    src_prs.Slides(1).Copy()
+                    time.sleep(0.3)
+                    target_prs.Slides.Paste()
+                except Exception as e:
+                    print(f'  Error copying slide {ref_slide_num}: {e}')
+                    src_prs.Close()
+                    continue
+                src_prs.Close()
+
+                # 텍스트 교체
+                new_slide = target_prs.Slides(target_prs.Slides.Count)
+                slide_info = slides_info.get(ref_slide_num, {})
+                fields = slide_data.get('fields', {})
+                tables = slide_data.get('tables', [])
+                if fields or tables:
+                    apply_fields_com(new_slide, slide_info, fields, tables)
+                built += 1
+
+            target_prs.SaveAs(os.path.abspath(output_path), 24)
+            target_prs.Close()
+
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+
+        else:
+            # === 기존 모드: 큰 placeholder에서 복사 (하위 호환) ===
+            ref_prs_cache = {}
+            ref_prs = pp.Presentations.Open(ref_pptx_path, WithWindow=False)
+            ref_prs_cache[ref_pptx_path] = ref_prs
+
+            def get_ref_prs(pptx_path):
+                abs_path = os.path.abspath(pptx_path)
+                if abs_path not in ref_prs_cache:
+                    if not os.path.exists(abs_path):
+                        raise FileNotFoundError(f'참조 PPTX: {abs_path}')
+                    ref_prs_cache[abs_path] = pp.Presentations.Open(abs_path, WithWindow=False)
+                return ref_prs_cache[abs_path]
+
+            temp_path = output_path + '.tmp.pptx'
+            shutil.copy2(ref_pptx_path, temp_path)
+            target_prs = pp.Presentations.Open(temp_path, WithWindow=False)
+
+            for i in range(target_prs.Slides.Count, 0, -1):
+                target_prs.Slides(i).Delete()
+
+            for slide_data in md_slides_batch:
+                ref_slide_num = slide_data.get('ref_slide')
+                if ref_slide_num is None:
+                    continue
+
+                slide_ref_pptx = slide_data.get('reference_pptx')
+                current_ref_prs = get_ref_prs(slide_ref_pptx) if slide_ref_pptx else ref_prs
+
+                slide_info = slides_info.get(ref_slide_num, {})
+                source_slide_num = slide_info.get('source_slide', ref_slide_num)
+
+                if source_slide_num < 1 or source_slide_num > current_ref_prs.Slides.Count:
+                    print(f'  Warning: source_slide {source_slide_num} out of range, skipping')
+                    continue
+
+                for attempt in range(3):
+                    try:
+                        current_ref_prs.Slides(source_slide_num).Copy()
+                        time.sleep(0.8)
+                        target_prs.Slides.Paste()
+                        break
+                    except Exception as e:
+                        if attempt < 2:
+                            time.sleep(1)
+                        else:
+                            print(f'  Error copying slide {ref_slide_num}: {e}')
+
+                new_slide = target_prs.Slides(target_prs.Slides.Count)
+                fields = slide_data.get('fields', {})
+                tables = slide_data.get('tables', [])
+                if fields or tables:
+                    apply_fields_com(new_slide, slide_info, fields, tables)
+                built += 1
+
+            target_prs.SaveAs(output_path, 24)
+            target_prs.Close()
+
+            for cached_prs in ref_prs_cache.values():
+                try:
+                    cached_prs.Close()
+                except Exception:
+                    pass
+
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
 
         return built
 
@@ -441,13 +502,13 @@ def _merge_pptx_files(part_files, output_path):
             pass
 
 
-def build_presentation(md_data: dict, slide_index: dict, output_path: str):
+def build_presentation(md_data: dict, slide_index: dict, output_path: str, slides_dir: str = None):
     """
     PowerPoint COM을 사용하여 PPTX 생성.
 
     전략: 배치 단위(20장)로 분할 생성 후 합치기.
-    - 각 배치마다 PowerPoint를 새로 열고 닫아 파일 잠금 방지
-    - 대량 슬라이드(100장+)도 안정적으로 처리
+    - slides_dir이 있으면 1장짜리 파일에서 복사 (고속, 권장)
+    - 없으면 큰 placeholder에서 복사 (하위 호환)
     """
     config = md_data.get('config', {})
     ref_pptx_path = os.path.abspath(config.get('reference_pptx', ''))
@@ -476,7 +537,7 @@ def build_presentation(md_data: dict, slide_index: dict, output_path: str):
     for bi, batch in enumerate(batches):
         part_path = f'{output_path}.part{bi + 1}.pptx'
         print(f'\n--- Batch {bi + 1}/{len(batches)} ({len(batch)} slides) ---')
-        built = _build_batch(batch, ref_pptx_path, slides_info, part_path)
+        built = _build_batch(batch, ref_pptx_path, slides_info, part_path, slides_dir=slides_dir)
         print(f'  Batch {bi + 1} done: {built} slides')
         if os.path.exists(part_path):
             part_files.append(part_path)

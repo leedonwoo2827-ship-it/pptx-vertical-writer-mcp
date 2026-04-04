@@ -368,8 +368,8 @@ if __name__ == '__main__':
         output_path = sys.argv[4] if len(sys.argv) > 4 else 'templates/slide_index.json'
 
         pptx_list = [
-            (vol2_path, TEMPLATE_MAP, 0, os.path.basename(vol2_path)),
-            (vol3_path, TEMPLATE_MAP_VOL3, 1000, os.path.basename(vol3_path)),
+            (vol2_path, TEMPLATE_MAP, 2000, os.path.basename(vol2_path)),
+            (vol3_path, TEMPLATE_MAP_VOL3, 3000, os.path.basename(vol3_path)),
         ]
         extract_and_merge(pptx_list, output_path)
     else:

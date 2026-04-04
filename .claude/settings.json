@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"C:/Users/leedonwoo/Documents/pro2ppt/260403-2/\"*.md)",
+      "Bash(grep -n \"\\\\.Name\\\\|shape_name\\\\|shape\\\\.Name\" /d/00work/260403-a3verticle-ppt/src/*.py)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\leedonwoo\\Documents\\pro2ppt\\260403-1",
+      "C:\\Users\\leedonwoo\\Documents\\pro2ppt\\260403-1\\templates",
+      "C:\\Users\\leedonwoo\\AppData\\Roaming\\Claude",
+      "C:\\Users\\leedonwoo\\Documents\\pro2ppt\\260403-2"
+    ]
+  }
+}
