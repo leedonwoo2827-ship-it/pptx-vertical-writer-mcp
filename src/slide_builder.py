@@ -61,24 +61,43 @@ SKIP_MARK_ROLES = {
 }
 
 
+def _build_name_map(shapes_com):
+    """COM shapes에서 name → shape 매핑 딕셔너리 구축"""
+    name_map = {}
+    for i in range(1, shapes_com.Count + 1):
+        try:
+            shape = shapes_com(i)
+            name_map[shape.Name] = shape
+        except Exception:
+            pass
+    return name_map
+
+
+def _get_shape_name(slide_info, meta_index):
+    """slide_index.json의 shapes 배열에서 meta_index번째 shape의 이름 반환"""
+    shapes_meta = slide_info.get('shapes', [])
+    if 0 <= meta_index < len(shapes_meta):
+        return shapes_meta[meta_index].get('name', '')
+    return ''
+
+
 def mark_unreplaced_shapes(slide_com, slide_info: dict, fields: dict):
     """
     교체되지 않은 텍스트 shape에 ★미교체★ 표식을 삽입.
-    사업자가 수동으로 교체하거나 삭제할 수 있도록 시각적 표시.
+    Shape name 기반 매칭으로 COM 복사 후에도 정확한 shape을 찾습니다.
     """
     role_map = slide_info.get('role_map', {})
     shapes_meta = slide_info.get('shapes', [])
     shapes_com = slide_com.Shapes
+    name_map = _build_name_map(shapes_com)
 
-    # 어떤 shape 인덱스가 교체되었는지 추적
-    replaced_indices = set()
+    # 어떤 shape name이 교체되었는지 추적
+    replaced_names = set()
 
     # 카드 테이블
-    for si in role_map.get('card_table', []):
-        for n, idx in enumerate(role_map.get('card_table', []), 1):
-            if idx == si:
-                if f'카드{n}_제목' in fields or f'카드{n}_내용' in fields:
-                    replaced_indices.add(si)
+    for n, si in enumerate(role_map.get('card_table', []), 1):
+        if f'카드{n}_제목' in fields or f'카드{n}_내용' in fields:
+            replaced_names.add(_get_shape_name(slide_info, si))
 
     # 일반 역할
     role_groups = {
@@ -95,23 +114,24 @@ def mark_unreplaced_shapes(slide_com, slide_info: dict, fields: dict):
         for n, si in enumerate(indices, 1):
             individual_key = f'{role_name}_{n}'
             if individual_key in fields or role_name in fields:
-                replaced_indices.add(si)
+                replaced_names.add(_get_shape_name(slide_info, si))
 
     # 교체되지 않은 shape에 표식
     for si, meta in enumerate(shapes_meta):
         role = meta.get('role', 'unknown')
         if role in SKIP_MARK_ROLES:
             continue
-        if si in replaced_indices:
+
+        shape_name = meta.get('name', '')
+        if shape_name in replaced_names:
             continue
 
         text = meta.get('text', '')
         if not text or len(text) <= 5:
             continue
 
-        com_idx = si + 1
-        if 1 <= com_idx <= shapes_com.Count:
-            shape = shapes_com(com_idx)
+        shape = name_map.get(shape_name)
+        if shape:
             try:
                 if shape.HasTextFrame:
                     current = shape.TextFrame.TextRange.Text
@@ -121,19 +141,76 @@ def mark_unreplaced_shapes(slide_com, slide_info: dict, fields: dict):
                 pass
 
 
+def _collect_all_text_shapes(shapes_com):
+    """COM 슬라이드의 모든 텍스트 가능 shape을 재귀 수집 (그룹 내부 포함)"""
+    result = []
+    for i in range(1, shapes_com.Count + 1):
+        shape = shapes_com(i)
+        try:
+            if shape.Type == 6:  # msoGroup
+                for gi in range(1, shape.GroupItems.Count + 1):
+                    gshape = shape.GroupItems(gi)
+                    try:
+                        if gshape.HasTextFrame:
+                            result.append(gshape)
+                    except Exception:
+                        pass
+            elif shape.HasTextFrame:
+                result.append(shape)
+        except Exception:
+            pass
+    return result
+
+
+def _find_shape_by_role_hint(text_shapes, role_hint):
+    """역할 힌트로 shape을 추정 매칭 (Governing Message, breadcrumb 등)"""
+    for shape in text_shapes:
+        try:
+            name = shape.Name.lower()
+
+            if role_hint == 'governing_message':
+                # 부제목 placeholder 또는 Governing Message 근처의 긴 텍스트
+                if '부제목' in name or 'subtitle' in name.lower():
+                    return shape
+            elif role_hint == 'breadcrumb':
+                # 제목 placeholder
+                if '제목' in name and '부제목' not in name:
+                    return shape
+                if 'title' in name.lower() and 'subtitle' not in name.lower():
+                    return shape
+            elif role_hint == 'content_1' or role_hint == 'content':
+                # content_box 역할이지만 role_map에 없는 경우
+                if '둥근' in name or '양쪽' in name or '모서리' in name:
+                    return shape
+        except Exception:
+            pass
+    return None
+
+
 def apply_fields_com(slide_com, slide_info: dict, fields: dict, tables: list = None):
     """
     PowerPoint COM 슬라이드에 필드 데이터를 적용.
-    slide_info의 role_map을 기반으로 shape을 찾아 텍스트 교체.
+    Shape name 기반 매칭 + 그룹 내부 탐색 fallback.
     """
     role_map = slide_info.get('role_map', {})
-
-    # COM shapes는 1-based index
     shapes_com = slide_com.Shapes
 
+    # COM shape들의 name → shape 매핑
+    name_map = _build_name_map(shapes_com)
+
+    # 그룹 내부 포함 모든 텍스트 shape 수집 (fallback용)
+    all_text_shapes = _collect_all_text_shapes(shapes_com)
+
+    # 교체 완료 추적
+    applied_fields = set()
+
     def get_com_shape(meta_index):
-        """slide_index.json의 0-based index를 COM 1-based index로 변환하여 shape 반환"""
-        com_idx = meta_index + 1  # 1-based
+        """slide_index.json의 0-based index에서 shape name을 조회 → COM shape 반환"""
+        shape_name = _get_shape_name(slide_info, meta_index)
+        if shape_name and shape_name in name_map:
+            return name_map[shape_name]
+        # fallback: 인덱스 기반 (name이 없거나 매칭 안 될 때)
+        com_idx = meta_index + 1
         if 1 <= com_idx <= shapes_com.Count:
             return shapes_com(com_idx)
         return None
@@ -152,17 +229,17 @@ def apply_fields_com(slide_com, slide_info: dict, fields: dict, tables: list = N
     # 일반 텍스트 shape 교체 (모든 역할에 대해 _N 인덱싱 지원)
     for role_name, indices in role_groups.items():
         for n, si in enumerate(indices, 1):
-            # @role (전체 교체) 또는 @role_N (개별 교체) 지원
             individual_key = f'{role_name}_{n}'
             if individual_key in fields:
                 shape = get_com_shape(si)
                 if shape:
-                    replace_shape_text_com(shape, fields[individual_key])
+                    if replace_shape_text_com(shape, fields[individual_key]):
+                        applied_fields.add(individual_key)
             elif role_name in fields:
-                # _N 없이 role만 있으면 모든 해당 shape에 같은 텍스트
                 shape = get_com_shape(si)
                 if shape:
-                    replace_shape_text_com(shape, fields[role_name])
+                    if replace_shape_text_com(shape, fields[role_name]):
+                        applied_fields.add(role_name)
 
     # 카드 테이블 교체 (카드N_제목, 카드N_내용)
     card_indices = role_map.get('card_table', [])
@@ -204,6 +281,40 @@ def apply_fields_com(slide_com, slide_info: dict, fields: dict, tables: list = N
                             if ci >= table_com.Columns.Count:
                                 break
                             replace_table_cell_com(table_com, ri + 1, ci + 1, str(cell_text))
+
+    # =====================================================================
+    # Fallback: role_map에서 매칭 못 한 필드를 그룹 내부까지 탐색하여 교체
+    # =====================================================================
+    remaining = {k: v for k, v in fields.items() if k not in applied_fields}
+    if remaining:
+        # governing_message → 부제목/subtitle shape 탐색
+        if 'governing_message' in remaining:
+            shape = _find_shape_by_role_hint(all_text_shapes, 'governing_message')
+            if shape:
+                replace_shape_text_com(shape, remaining.pop('governing_message'))
+
+        # breadcrumb → 제목/title shape 탐색
+        if 'breadcrumb' in remaining:
+            shape = _find_shape_by_role_hint(all_text_shapes, 'breadcrumb')
+            if shape:
+                replace_shape_text_com(shape, remaining.pop('breadcrumb'))
+
+        # content_1 등 남은 content 필드 → 순서대로 텍스트 shape에 배치
+        content_fields = sorted([k for k in remaining if k.startswith('content_')])
+        if content_fields:
+            # 텍스트가 있는(블록처리된) shape 중 아직 교체 안 된 것들
+            available = []
+            for shape in all_text_shapes:
+                try:
+                    t = shape.TextFrame.TextRange.Text
+                    if t and '████' in t:
+                        available.append(shape)
+                except Exception:
+                    pass
+
+            for i, key in enumerate(content_fields):
+                if i < len(available):
+                    replace_shape_text_com(available[i], remaining[key])
 
 
 def build_presentation(md_data: dict, slide_index: dict, output_path: str):
@@ -284,7 +395,7 @@ def build_presentation(md_data: dict, slide_index: dict, output_path: str):
             for attempt in range(3):
                 try:
                     current_ref_prs.Slides(source_slide_num).Copy()
-                    time.sleep(0.5)
+                    time.sleep(1.0)
                     target_prs.Slides.Paste()
                     break
                 except Exception as e:
@@ -302,7 +413,7 @@ def build_presentation(md_data: dict, slide_index: dict, output_path: str):
                 apply_fields_com(new_slide, slide_info, fields, tables)
 
             # 미교체 텍스트에 ★미교체★ 표식 삽입
-            mark_unreplaced_shapes(new_slide, slide_info, fields)
+            # 미교체 shape은 ████ 블록 그대로 유지 (★미교체★ 표시 안 함)
 
             print(f'  Built slide from ref #{ref_slide_num} (template: {slide_data.get("template", "?")})')
 
