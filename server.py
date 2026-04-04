@@ -277,29 +277,23 @@ def analyze_template(
 
 @mcp.tool()
 def create_pptx(
-    extended_md: str,
+    extended_md: str = "",
+    md_file: str = "",
     output_file: str = "",
     project_dir: str = "",
     template_dir: str = ""
 ) -> str:
     """확장 마크다운으로부터 PowerPoint 프레젠테이션을 생성합니다.
 
-    확장 MD 포맷:
-    ---config
-    reference_pptx: path/to/placeholder.pptx  (생략 시 기본 템플릿 사용)
-    ---
+    2가지 입력 방식을 지원합니다:
+    1. extended_md: 확장 MD 텍스트를 직접 전달 (짧은 문서용)
+    2. md_file: 확장 MD 파일 경로 전달 (긴 문서용, 권장)
 
-    ---slide
-    template: T1
-    ref_slide: 5
-    ---
-    @governing_message: 거버닝 메시지 텍스트
-    @카드1_제목: 첫 번째 카드 제목
-    @카드1_내용: 첫 번째 카드 내용
-    @content_1: 본문 텍스트
+    md_file이 지정되면 extended_md보다 우선합니다.
 
     Args:
-        extended_md: 확장 마크다운 텍스트 (---slide 구분자 포함)
+        extended_md: 확장 마크다운 텍스트 (짧은 문서용)
+        md_file: 확장 마크다운 파일 경로 (긴 문서용, 권장)
         output_file: 출력 PPTX 파일명
         project_dir: 프로젝트 폴더 (지정 시 output/ 하위에 저장)
         template_dir: 템플릿 디렉토리 (생략 시 기본 templates/)
@@ -326,8 +320,21 @@ def create_pptx(
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     try:
+        # md_file 우선, 없으면 extended_md 사용
+        md_text = extended_md
+        if md_file:
+            md_path = Path(md_file)
+            if not md_path.is_absolute() and project_dir:
+                md_path = Path(project_dir) / md_file
+            if not md_path.exists():
+                return f"오류: MD 파일을 찾을 수 없습니다: {md_path}"
+            md_text = md_path.read_text(encoding='utf-8')
+
+        if not md_text.strip():
+            return "오류: 확장 MD 내용이 비어있습니다. extended_md 또는 md_file을 지정하세요."
+
         # MD 파싱
-        md_data = parse_md(extended_md)
+        md_data = parse_md(md_text)
 
         # reference_pptx 기본값 설정
         if 'reference_pptx' not in md_data.get('config', {}):
