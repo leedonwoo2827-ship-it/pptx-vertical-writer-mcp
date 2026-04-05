@@ -452,7 +452,7 @@ def _build_batch(md_slides_batch, ref_pptx_path, slides_info, output_path, slide
                 apply_fields_com(target_prs.Slides(1), slide_info, fields, tables)
             built += 1
 
-            # 나머지 슬라이드를 1장씩 열어서 복사
+            # 나머지 슬라이드를 InsertFromFile로 추가 (클립보드 미사용, 손상 방지)
             for slide_data in md_slides_batch[1:]:
                 ref_slide_num = slide_data.get('ref_slide')
                 if ref_slide_num is None:
@@ -463,16 +463,12 @@ def _build_batch(md_slides_batch, ref_pptx_path, slides_info, output_path, slide
                     print(f'  Warning: {slide_file} not found, skipping')
                     continue
 
-                src_prs = pp.Presentations.Open(os.path.abspath(slide_file), WithWindow=False)
                 try:
-                    src_prs.Slides(1).Copy()
-                    time.sleep(0.3)
-                    target_prs.Slides.Paste()
+                    insert_at = target_prs.Slides.Count
+                    target_prs.Slides.InsertFromFile(os.path.abspath(slide_file), insert_at)
                 except Exception as e:
-                    print(f'  Error copying slide {ref_slide_num}: {e}')
-                    src_prs.Close()
+                    print(f'  Error inserting slide {ref_slide_num}: {e}')
                     continue
-                src_prs.Close()
 
                 # 텍스트 교체
                 new_slide = target_prs.Slides(target_prs.Slides.Count)
@@ -525,6 +521,7 @@ def _build_batch(md_slides_batch, ref_pptx_path, slides_info, output_path, slide
                     print(f'  Warning: source_slide {source_slide_num} out of range, skipping')
                     continue
 
+                # InsertFromFile은 파일 단위이므로 큰 ref에서는 Copy/Paste fallback
                 for attempt in range(3):
                     try:
                         current_ref_prs.Slides(source_slide_num).Copy()
@@ -563,8 +560,7 @@ def _build_batch(md_slides_batch, ref_pptx_path, slides_info, output_path, slide
 
 
 def _merge_pptx_files(part_files, output_path):
-    """여러 PPTX 파일을 하나로 합치기"""
-    import time
+    """여러 PPTX 파일을 하나로 합치기 (InsertFromFile 방식, 클립보드 미사용)"""
 
     if len(part_files) == 1:
         shutil.move(part_files[0], output_path)
@@ -575,14 +571,14 @@ def _merge_pptx_files(part_files, output_path):
         # 첫 번째 파일을 기반으로
         target_prs = pp.Presentations.Open(os.path.abspath(part_files[0]), WithWindow=False)
 
-        # 나머지 파일의 슬라이드를 추가
+        # InsertFromFile로 나머지 파일의 슬라이드를 추가 (클립보드 불필요)
         for part_file in part_files[1:]:
-            src_prs = pp.Presentations.Open(os.path.abspath(part_file), WithWindow=False)
-            for si in range(1, src_prs.Slides.Count + 1):
-                src_prs.Slides(si).Copy()
-                time.sleep(0.5)
-                target_prs.Slides.Paste()
-            src_prs.Close()
+            abs_path = os.path.abspath(part_file)
+            insert_at = target_prs.Slides.Count
+            try:
+                target_prs.Slides.InsertFromFile(abs_path, insert_at)
+            except Exception as e:
+                print(f'  Warning: InsertFromFile failed for {part_file}: {e}')
 
         target_prs.SaveAs(os.path.abspath(output_path), 24)
         target_prs.Close()
