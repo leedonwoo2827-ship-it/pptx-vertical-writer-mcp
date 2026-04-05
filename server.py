@@ -16,7 +16,7 @@ sys.path.insert(0, str(BASE_DIR / "src"))
 
 from mcp.server.fastmcp import FastMCP
 from md_parser import parse_md, split_slide_blocks, parse_slide_block
-from slide_builder import build_presentation, load_slide_index, build_single_slide, merge_pptx_files_safe
+from slide_builder import build_presentation, load_slide_index, build_single_slide, merge_pptx_files_safe, _verify_pptx
 
 mcp = FastMCP("pptx-vertical-writer")
 
@@ -285,10 +285,16 @@ def merge_slides(
         if not files:
             return "오류: 합칠 파일 목록이 비어있습니다."
 
-        # 존재하지 않는 파일 필터링
+        # 존재하지 않거나 손상된 파일 필터링
         existing = [f for f in files if Path(f).exists()]
         if not existing:
             return "오류: 지정된 파일이 모두 존재하지 않습니다."
+        valid = [f for f in existing if _verify_pptx(f)]
+        skipped = len(existing) - len(valid)
+        if not valid:
+            return "오류: 모든 PPTX 파일이 손상되었습니다."
+        if skipped:
+            existing = valid
 
         out_path = _resolve_output(project_dir, output_file, fallback="merged.pptx")
         out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -297,7 +303,10 @@ def merge_slides(
 
         if out_path.exists():
             size = out_path.stat().st_size
-            return f"병합 완료!\n파일: {out_path}\n크기: {size:,} bytes\n슬라이드: {len(existing)}장"
+            msg = f"병합 완료!\n파일: {out_path}\n크기: {size:,} bytes\n슬라이드: {len(existing)}장"
+            if skipped:
+                msg += f"\n경고: 손상된 파일 {skipped}개 건너뜀"
+            return msg
         return f"오류: 병합 파일 생성 실패: {out_path}"
 
     except Exception as e:

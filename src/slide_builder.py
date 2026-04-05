@@ -24,6 +24,33 @@ def _get_powerpoint():
     return pp
 
 
+def _quit_powerpoint(pp):
+    """PowerPoint COM 종료 + 프로세스 완전 종료 대기"""
+    import time
+    import gc
+    try:
+        pp.Quit()
+    except Exception:
+        pass
+    # COM 참조 해제를 강제하여 프로세스가 확실히 종료되도록
+    del pp
+    gc.collect()
+    time.sleep(0.5)
+
+
+def _verify_pptx(path: str, min_size: int = 4096) -> bool:
+    """PPTX 파일이 유효한지 최소 크기로 검증 (ZIP 헤더 포함)"""
+    if not os.path.exists(path):
+        return False
+    size = os.path.getsize(path)
+    if size < min_size:
+        return False
+    # ZIP magic number 확인 (PK\x03\x04)
+    with open(path, 'rb') as f:
+        magic = f.read(4)
+    return magic == b'PK\x03\x04'
+
+
 def replace_shape_text_com(shape_com, new_text: str):
     """
     PowerPoint COM shape의 텍스트를 서식 보존하면서 교체.
@@ -348,10 +375,11 @@ def build_single_slide(slide_data: dict, slides_info: dict, output_path: str, sl
         prs.Save()
         prs.Close()
     finally:
-        try:
-            pp.Quit()
-        except Exception:
-            pass
+        _quit_powerpoint(pp)
+
+    # 저장된 파일 검증
+    if not _verify_pptx(output_path):
+        raise RuntimeError(f'PPTX 파일 손상: {output_path}')
 
     return output_path
 
@@ -531,10 +559,7 @@ def _build_batch(md_slides_batch, ref_pptx_path, slides_info, output_path, slide
         return built
 
     finally:
-        try:
-            pp.Quit()
-        except Exception:
-            pass
+        _quit_powerpoint(pp)
 
 
 def _merge_pptx_files(part_files, output_path):
@@ -563,10 +588,7 @@ def _merge_pptx_files(part_files, output_path):
         target_prs.Close()
 
     finally:
-        try:
-            pp.Quit()
-        except Exception:
-            pass
+        _quit_powerpoint(pp)
 
     # 임시 파일 삭제
     for f in part_files:
