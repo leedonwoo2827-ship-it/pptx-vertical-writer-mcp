@@ -1,4 +1,4 @@
-# pptx-vertical-writer-mcp
+# pptx-vertical-writer
 
 A3 세로형 PPTX 제안서 작성 MCP 서버 — 3단계 파이프라인의 **2단계**.
 
@@ -30,8 +30,8 @@ Claude Desktop에서 MCP 서버로 연결하여:
 ## 설치
 
 ```bash
-git clone https://github.com/leedonwoo2827-ship-it/pptx-vertical-writer-mcp.git
-cd pptx-vertical-writer-mcp
+git clone https://github.com/leedonwoo2827-ship-it/pptx-vertical-writer.git
+cd pptx-vertical-writer
 pip install -r requirements.txt
 ```
 
@@ -87,7 +87,7 @@ ref_slide: 3022
 ## 서버 소스 구조
 
 ```
-pptx-vertical-writer-mcp/
+pptx-vertical-writer/
 ├── server.py              # MCP 서버 (parse_md_slides)
 ├── src/
 │   └── md_parser.py       # 확장 MD 파서
