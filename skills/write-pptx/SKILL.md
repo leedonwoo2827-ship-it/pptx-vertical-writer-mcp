@@ -2,7 +2,7 @@
 name: write-pptx
 description: 마크다운 텍스트를 회사 표준 템플릿에 맞춰 PowerPoint 프레젠테이션으로 변환합니다. "PPTX 만들어줘", "슬라이드로 변환", "프레젠테이션 생성", "제안서 PPT" 등의 요청 시 사용합니다.
 version: 2.0.0
-allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__list_templates, mcp__pptx_vertical_writer__create_pptx, mcp__pptx_vertical_writer__add_template]
+allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__create_pptx, mcp__pptx_vertical_writer__parse_md_slides, mcp__pptx_vertical_writer__build_slide, mcp__pptx_vertical_writer__merge_slides]
 ---
 
 # PPTX 변환 스킬

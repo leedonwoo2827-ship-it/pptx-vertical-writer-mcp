@@ -2,7 +2,7 @@
 name: create-proposal-pptx
 description: RFP와 참고자료를 기반으로 A3 세로형 PPTX 제안서를 작성합니다. "PPTX 제안서 만들어줘", "세로형 슬라이드 제안서", "프로젝트 폴더 기반 PPTX" 등의 요청 시 사용합니다.
 version: 2.0.0
-allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__list_templates, mcp__pptx_vertical_writer__showcase_templates, mcp__pptx_vertical_writer__create_pptx, mcp__pptx_vertical_writer__match_slide, mcp__pptx_vertical_writer__add_template]
+allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__create_pptx, mcp__pptx_vertical_writer__parse_md_slides, mcp__pptx_vertical_writer__build_slide, mcp__pptx_vertical_writer__merge_slides]
 ---
 
 # PPTX 제안서 오케스트레이션 스킬
