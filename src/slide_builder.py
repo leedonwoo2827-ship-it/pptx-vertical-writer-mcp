@@ -38,7 +38,7 @@ def _quit_powerpoint(pp):
     time.sleep(0.5)
 
 
-def _verify_pptx(path: str, min_size: int = 4096) -> bool:
+def verify_pptx(path: str, min_size: int = 4096) -> bool:
     """PPTX 파일이 유효한지 최소 크기로 검증 (ZIP 헤더 포함)"""
     if not os.path.exists(path):
         return False
@@ -63,8 +63,7 @@ def replace_shape_text_com(shape_com, new_text: str):
         tr = shape_com.TextFrame.TextRange
         tr.Text = new_text
         return True
-    except Exception as e:
-        # 일부 shape은 텍스트 수정 불가
+    except Exception:
         return False
 
 
@@ -76,16 +75,6 @@ def replace_table_cell_com(table_com, row, col, new_text: str):
         return True
     except Exception:
         return False
-
-
-MARKER = '★미교체★ '
-
-# 표식 대상에서 제외할 역할 (장식, 라벨 등)
-SKIP_MARK_ROLES = {
-    'group_decoration', 'decoration', 'empty_shape', 'unknown',
-    'governing_label', 'chapter_label', 'page_number', 'number_circle',
-    'image',
-}
 
 
 def _build_name_map(shapes_com):
@@ -106,66 +95,6 @@ def _get_shape_name(slide_info, meta_index):
     if 0 <= meta_index < len(shapes_meta):
         return shapes_meta[meta_index].get('name', '')
     return ''
-
-
-def mark_unreplaced_shapes(slide_com, slide_info: dict, fields: dict):
-    """
-    교체되지 않은 텍스트 shape에 ★미교체★ 표식을 삽입.
-    Shape name 기반 매칭으로 COM 복사 후에도 정확한 shape을 찾습니다.
-    """
-    role_map = slide_info.get('role_map', {})
-    shapes_meta = slide_info.get('shapes', [])
-    shapes_com = slide_com.Shapes
-    name_map = _build_name_map(shapes_com)
-
-    # 어떤 shape name이 교체되었는지 추적
-    replaced_names = set()
-
-    # 카드 테이블
-    for n, si in enumerate(role_map.get('card_table', []), 1):
-        if f'카드{n}_제목' in fields or f'카드{n}_내용' in fields:
-            replaced_names.add(_get_shape_name(slide_info, si))
-
-    # 일반 역할
-    role_groups = {
-        'governing_message': role_map.get('governing_message', []),
-        'breadcrumb': role_map.get('breadcrumb', []),
-        'section_title': role_map.get('section_title', []),
-        'content': sorted(role_map.get('content_box', []) + role_map.get('content_shape', [])),
-        'heading': role_map.get('heading_box', []),
-        'label': sorted(role_map.get('label_box', []) + role_map.get('label_shape', [])),
-        'text': role_map.get('text_content', []),
-    }
-
-    for role_name, indices in role_groups.items():
-        for n, si in enumerate(indices, 1):
-            individual_key = f'{role_name}_{n}'
-            if individual_key in fields or role_name in fields:
-                replaced_names.add(_get_shape_name(slide_info, si))
-
-    # 교체되지 않은 shape에 표식
-    for si, meta in enumerate(shapes_meta):
-        role = meta.get('role', 'unknown')
-        if role in SKIP_MARK_ROLES:
-            continue
-
-        shape_name = meta.get('name', '')
-        if shape_name in replaced_names:
-            continue
-
-        text = meta.get('text', '')
-        if not text or len(text) <= 5:
-            continue
-
-        shape = name_map.get(shape_name)
-        if shape:
-            try:
-                if shape.HasTextFrame:
-                    current = shape.TextFrame.TextRange.Text
-                    if current and not current.startswith(MARKER):
-                        shape.TextFrame.TextRange.Text = MARKER + current
-            except Exception:
-                pass
 
 
 def _collect_all_text_shapes(shapes_com):
@@ -196,14 +125,12 @@ def _find_shape_by_role_hint(text_shapes, role_hint):
             name = shape.Name.lower()
 
             if role_hint == 'governing_message':
-                # 부제목 placeholder 또는 Governing Message 근처의 긴 텍스트
-                if '부제목' in name or 'subtitle' in name.lower():
+                if '부제목' in name or 'subtitle' in name:
                     return shape
             elif role_hint == 'breadcrumb':
-                # 제목 placeholder
                 if '제목' in name and '부제목' not in name:
                     return shape
-                if 'title' in name.lower() and 'subtitle' not in name.lower():
+                if 'title' in name and 'subtitle' not in name:
                     return shape
             elif role_hint == 'content_1' or role_hint == 'content':
                 # content_box 역할이지만 role_map에 없는 경우
@@ -378,7 +305,7 @@ def build_single_slide(slide_data: dict, slides_info: dict, output_path: str, sl
         _quit_powerpoint(pp)
 
     # 저장된 파일 검증
-    if not _verify_pptx(output_path):
+    if not verify_pptx(output_path):
         raise RuntimeError(f'PPTX 파일 손상: {output_path}')
 
     return output_path

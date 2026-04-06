@@ -185,31 +185,6 @@ def parse_md_table(table_lines: List[str]) -> Optional[Dict]:
     }
 
 
-def parse_bullets(text: str) -> List[Dict]:
-    """불릿 텍스트를 파싱"""
-    bullets = []
-    for line in text.split('\n'):
-        line = line.strip()
-        match = re.match(r'^[-*+]\s+(.*)', line)
-        if match:
-            bullets.append({
-                'level': 0,
-                'text': match.group(1)
-            })
-        elif re.match(r'^\d+\.\s+(.*)', line):
-            match = re.match(r'^\d+\.\s+(.*)', line)
-            bullets.append({
-                'level': 0,
-                'text': match.group(1)
-            })
-        elif line:
-            bullets.append({
-                'level': 0,
-                'text': line
-            })
-    return bullets
-
-
 def split_slide_blocks(md_text: str) -> tuple:
     """
     확장 MD를 파싱하여 (config, slide_blocks) 반환.
@@ -245,36 +220,3 @@ def split_slide_blocks(md_text: str) -> tuple:
     return config, blocks
 
 
-if __name__ == '__main__':
-    # 테스트
-    test_md = """
----config
-reference_pptx: reference-ppt/test.pptx
-master_template: templates/master.pptx
----
-
----slide
-template: T1
-ref_slide: 5
----
-@governing_message: 제도 기반 인프라 구축의 문제를 해결하기 위해 체계적 접근이 필요합니다.
-@section_title: 현황 및 문제점
-@카드1_제목: 제도적 과제
-@카드1_내용: 수원기관은 국가 주도의 디지털 교육 전환 로드맵에 참여하고 있으나, 법적 근거가 미흡합니다.
-@카드2_제목: 기술적 과제
-@카드2_내용: 이러닝 전용 스튜디오, 편집실, 서버실 등 핵심 인프라가 부재합니다.
-
----slide
-template: T6
-ref_slide: 22
----
-@governing_message: 성과관리 방법론을 적용하여 체계적으로 관리합니다.
-
-| 구분 | 방법론 | 비고 |
-|---|---|---|
-| 정보수집 | 설문조사 | 분기별 |
-| 분석 | 통계분석 | 연간 |
-"""
-    import json
-    result = parse_md(test_md)
-    print(json.dumps(result, ensure_ascii=False, indent=2))

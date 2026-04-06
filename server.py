@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-pptx-vertical-writer MCP Server
+pptx-vertical-writer MCP Server  (2단계)
 
-확장 마크다운(Extended MD) → PowerPoint 프레젠테이션 변환.
-프로젝트 폴더의 templates/slides/ 에서 1장짜리 PPTX를 가져와 조립합니다.
+Claude Desktop에서 제안서 확장 마크다운(Extended MD)을 작성하고,
+작성된 MD로부터 PPTX를 생성할 수 있는 MCP 서버입니다.
+
+파이프라인:
+  1단계 ppt-block-maker     → 원본 PPTX 분석, 템플릿 생성
+  2단계 이 서버              → 템플릿 매칭 + AI 기반 제안서 MD 작성
+  3단계 md2verticalpptx     → 확장 MD → PPTX 변환 (CLI)
 
 실행: python server.py
 """
@@ -15,8 +20,8 @@ BASE_DIR = Path(__file__).parent
 sys.path.insert(0, str(BASE_DIR / "src"))
 
 from mcp.server.fastmcp import FastMCP
-from md_parser import parse_md, split_slide_blocks, parse_slide_block
-from slide_builder import build_presentation, load_slide_index, build_single_slide, merge_pptx_files_safe, _verify_pptx
+from md_parser import parse_md, split_slide_blocks
+from slide_builder import build_presentation, load_slide_index, build_single_slide, merge_pptx_files_safe, verify_pptx
 
 mcp = FastMCP("pptx-vertical-writer")
 
@@ -42,7 +47,7 @@ def _resolve_output(project_dir: str, output_file: str, fallback: str = "output.
 
 
 # ---------------------------------------------------------------------------
-# MCP 도구 (1개)
+# MCP 도구 (4개)
 # ---------------------------------------------------------------------------
 
 @mcp.tool()
@@ -289,7 +294,7 @@ def merge_slides(
         existing = [f for f in files if Path(f).exists()]
         if not existing:
             return "오류: 지정된 파일이 모두 존재하지 않습니다."
-        valid = [f for f in existing if _verify_pptx(f)]
+        valid = [f for f in existing if verify_pptx(f)]
         skipped = len(existing) - len(valid)
         if not valid:
             return "오류: 모든 PPTX 파일이 손상되었습니다."
