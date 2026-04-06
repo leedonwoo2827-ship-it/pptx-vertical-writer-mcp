@@ -1,0 +1,14 @@
+{
+  "name": "pptx-vertical-writer",
+  "version": "3.0.0",
+  "description": "A3 세로형 PPTX 제안서 작성 — 템플릿 매칭 + AI 기반 확장 마크다운 작성 (2단계)",
+  "mcpServers": {
+    "pptx-vertical-writer": {
+      "command": "python",
+      "args": ["-X", "utf8", "${CLAUDE_PLUGIN_ROOT}/server.py"],
+      "env": {
+        "PYTHONIOENCODING": "utf-8"
+      }
+    }
+  }
+}
