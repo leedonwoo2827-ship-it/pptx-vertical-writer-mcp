@@ -23,11 +23,20 @@ allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__list_templat
 
 ## 실행 워크플로우
 
+### Step 0: 스타트 프롬프트 확인 (있는 경우)
+1. 프로젝트 폴더에 `start_prompt.md`가 있는지 확인합니다
+2. **있으면**: start_prompt.md를 읽고 그 지시를 따릅니다 (파일 목록, 파트 구분, 볼륨 범위가 이미 정리되어 있음)
+3. **없으면**: 아래 Step 1부터 직접 분석합니다
+
+> `start_prompt.md`는 1단계 도구(ppt-block-maker)가 자동 생성합니다.
+> 이 파일에는 프로젝트 내 참고자료 목록, 슬라이드 현황, 작업 규칙이 포함되어 있습니다.
+
 ### Step 1: 프로젝트 폴더 분석
 1. 프로젝트 폴더 경로를 확인합니다
 2. `docs/GUIDE.md`를 읽어 전체 구조를 파악합니다
-3. rfp/ 내 RFP 문서를 읽어 요구사항을 분석합니다
-4. **RFP에 목차/분량/템플릿 지정이 있으면 그대로 따릅니다**
+3. `rfp/사업개요.md`, `rfp/목차.md`가 있으면 우선 읽습니다
+4. rfp/ 내 RFP 문서를 읽어 요구사항을 분석합니다
+5. **RFP에 목차/분량/템플릿 지정이 있으면 그대로 따릅니다**
 
 ### Step 2: 목차(Backbone) 생성
 1. RFP 분석 결과를 기반으로 각 섹션의 템플릿 타입(T0~T9)을 결정합니다
@@ -47,8 +56,9 @@ allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__list_templat
 4. 확인된 backbone을 `proposal-backbone.md`로 저장합니다
 
 ### Step 3: 본문 작성 (확장 MD)
-1. `docs/T?.md`에서 해당 ref_slide의 **복사용 스니펫**을 가져옵니다
-2. 스니펫의 괄호 내용을 실제 내용으로 채웁니다
+1. `docs/slides/S????.md`가 있으면 해당 슬라이드의 원본 텍스트 + @필드 구조를 참고합니다
+2. 없으면 `docs/T?.md`에서 해당 ref_slide의 **복사용 스니펫**을 가져옵니다
+3. @필드를 실제 내용으로 채웁니다
 3. 출처 주석을 추가합니다:
    ```
    @카드1_내용: 실제 내용
