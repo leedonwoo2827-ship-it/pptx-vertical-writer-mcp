@@ -7,9 +7,9 @@ A3 세로형 PPTX 제안서 작성 MCP 서버 — 3단계 파이프라인의 **2
 ```
 1단계  ppt-block-maker        원본 PPTX → 블록처리 템플릿 + 메타데이터 + 참조 MD
        ↓
-2단계  pptx-vertical-writer   참조자료 + AI → 확장 MD 작성 → PPTX 생성 (이 저장소)
+2단계  pptx-vertical-writer   참조자료 + AI → 확장 MD 작성 (이 저장소)
        ↓
-3단계  md2verticalpptx        확장 MD → 최종 PPTX (CLI 도구)
+3단계  md2verticalpptx        확장 MD → 최종 PPTX 변환 (CLI)
 ```
 
 - 1단계: [ppt-block-maker](https://github.com/leedonwoo2827-ship-it/ppt-block-maker)
@@ -21,11 +21,10 @@ Claude Desktop에서 MCP 서버로 연결하여:
 
 1. 1단계에서 생성된 `docs/`, `templates/slides/`를 참조
 2. RFP, rawdata, references를 읽고 확장 마크다운(proposal-body.md) 작성
-3. PowerPoint COM API로 PPTX를 직접 생성하거나, 3단계 CLI에 전달
+3. 작성된 MD를 3단계 CLI(`md2verticalpptx`)에 전달하여 PPTX 생성
 
 ## 요구사항
 
-- Windows + Microsoft PowerPoint 설치
 - Python 3.10+
 
 ## 설치
@@ -36,20 +35,11 @@ cd pptx-vertical-writer-mcp
 pip install -r requirements.txt
 ```
 
-## MCP 도구 (4개)
+## MCP 도구
 
 | 도구 | 설명 |
 |---|---|
-| `create_pptx` | 확장 MD → PPTX 일괄 생성 (20장 배치 + 자동 병합) |
-| `parse_md_slides` | 확장 MD 파싱 → 슬라이드 목록 JSON 반환 |
-| `build_slide` | 단일 슬라이드 PPTX 생성 (MCP 타임아웃 방지용) |
-| `merge_slides` | 여러 PPTX를 하나로 병합 (InsertFromFile, 클립보드 미사용) |
-
-### 대량 문서 워크플로우 (20장 이상)
-
-```
-parse_md_slides(md_file)  →  build_slide(slide_md) x N회  →  merge_slides(slide_files)
-```
+| `parse_md_slides` | 확장 MD 파싱 → 슬라이드 목록 JSON 반환 (MD 검증용) |
 
 ## 확장 마크다운 포맷
 
@@ -98,10 +88,9 @@ ref_slide: 3022
 
 ```
 pptx-vertical-writer-mcp/
-├── server.py              # MCP 서버 (4개 도구)
+├── server.py              # MCP 서버 (parse_md_slides)
 ├── src/
-│   ├── md_parser.py       # 확장 MD 파서
-│   └── slide_builder.py   # PowerPoint COM 빌더 + InsertFromFile 병합
+│   └── md_parser.py       # 확장 MD 파서
 ├── templates/
 │   └── slide_index.json   # 기본 슬라이드 메타데이터
 ├── skills/                # Claude 스킬 정의
@@ -110,7 +99,7 @@ pptx-vertical-writer-mcp/
 
 ## 3단계 CLI 빌드
 
-PPTX 빌드를 터미널에서 직접 실행하려면 [md2verticalpptx](https://github.com/leedonwoo2827-ship-it/md2verticalpptx)를 사용:
+PPTX 빌드를 터미널에서 실행하려면 [md2verticalpptx](https://github.com/leedonwoo2827-ship-it/md2verticalpptx)를 사용:
 
 ```bash
 python -m md2pptx proposal-body.md -t templates/slides -o output/result.pptx --continue-on-error -v

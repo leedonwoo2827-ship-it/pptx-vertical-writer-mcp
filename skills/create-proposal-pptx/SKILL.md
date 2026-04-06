@@ -2,7 +2,7 @@
 name: create-proposal-pptx
 description: RFP와 참고자료를 기반으로 A3 세로형 PPTX 제안서를 작성합니다. "PPTX 제안서 만들어줘", "세로형 슬라이드 제안서", "프로젝트 폴더 기반 PPTX" 등의 요청 시 사용합니다.
 version: 2.0.0
-allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__create_pptx, mcp__pptx_vertical_writer__parse_md_slides, mcp__pptx_vertical_writer__build_slide, mcp__pptx_vertical_writer__merge_slides]
+allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__parse_md_slides]
 ---
 
 # PPTX 제안서 오케스트레이션 스킬
@@ -66,20 +66,11 @@ allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__create_pptx,
    ```
 4. 작성된 확장 MD를 `proposal-body-extended.md`로 저장합니다
 
-### Step 4: PPTX 생성
-1. 저장된 확장 MD 파일을 읽습니다
-2. `mcp__pptx_vertical_writer__create_pptx(extended_md=텍스트, project_dir=경로)`를 호출합니다
-3. output/ 폴더에 PPTX가 생성됩니다
-
-**주의: MCP 도구는 1회 호출당 1개만 사용합니다 (타임아웃 방지)**
-
-### Step 5: 결과 보고
-- 생성된 파일 경로, 슬라이드 수, 파일 크기를 보고합니다
-- 미입력 필드가 있으면 목록을 함께 안내합니다
+### Step 4: PPTX 변환 (3단계 CLI)
+1. 작성된 proposal-body-extended.md를 3단계 CLI(`md2verticalpptx`)로 전달합니다
+2. `python -m md2pptx proposal-body-extended.md -t templates/slides -o output/result.pptx --continue-on-error -v`
 
 ## 주의사항
-- PowerPoint가 설치된 Windows 환경에서만 동작합니다
 - 긴 문장은 슬라이드에 맞게 300자 이내로 요약합니다
 - 각 단계마다 사용자 확인을 받습니다 (특히 backbone)
-- MCP 도구 호출은 한 턴에 1회만 합니다
 - 색상 마커(`{{red:}}`, `{{green:}}`) 대신 HTML 주석 출처 표기를 사용합니다
