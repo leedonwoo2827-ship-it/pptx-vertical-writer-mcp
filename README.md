@@ -1,31 +1,34 @@
 # pptx-vertical-writer
 
-A3 세로형 PPTX 제안서 작성 MCP 서버 — 3단계 파이프라인의 **2단계**.
+Claude Desktop에서 제안서 본문을 작성하는 MCP 서버입니다.
+[pptxpipe](https://github.com/leedonwoo2827-ship-it/pptxpipe)가 1단계(분석)와 3단계(PPTX 변환)를, 이 서버가 2단계(AI 글쓰기)를 담당합니다.
 
-## 파이프라인 개요
+## 파이프라인
 
 ```
-1단계  ppt-block-maker        원본 PPTX → 블록처리 템플릿 + 메타데이터 + 참조 MD
-       ↓
-2단계  pptx-vertical-writer   참조자료 + AI → 확장 MD 작성 (이 저장소)
-       ↓
-3단계  md2verticalpptx        확장 MD → 최종 PPTX 변환 (CLI)
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│  1단계  pptxpipe           PPTX 분석 + 템플릿 분리           │
+│         (명령 프롬프트)     → slide_index, 카탈로그, 가이드   │
+│                    │                                        │
+│                    ▼  start_prompt.md                       │
+│                                                             │
+│  2단계  pptx-vertical-writer   AI가 마크다운으로 본문 작성    │
+│         (Claude Desktop)       → proposal-body-partN.md     │
+│                    │                                        │
+│                    ▼  작성된 마크다운                        │
+│                                                             │
+│  3단계  pptxpipe build     마크다운 → PPTX 변환              │
+│         (명령 프롬프트)     → 최종 result.pptx               │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-- 1단계: [ppt-block-maker](https://github.com/leedonwoo2827-ship-it/ppt-block-maker)
-- 3단계: [md2verticalpptx](https://github.com/leedonwoo2827-ship-it/md2verticalpptx)
-
-## 이 서버가 하는 일
-
-Claude Desktop에서 MCP 서버로 연결하여:
-
-1. 1단계에서 생성된 `docs/`, `templates/slides/`를 참조
-2. RFP, rawdata, references를 읽고 확장 마크다운(proposal-body.md) 작성
-3. 작성된 MD를 3단계 CLI(`md2verticalpptx`)에 전달하여 PPTX 생성
-
-## 요구사항
-
-- Python 3.10+
+| 단계 | 저장소 | 도구 |
+|------|--------|------|
+| **1단계** PPTX 분석 | [pptxpipe](https://github.com/leedonwoo2827-ship-it/pptxpipe) | 명령 프롬프트 |
+| **2단계** AI 글쓰기 | **이 저장소** | Claude Desktop |
+| **3단계** PPTX 변환 | [pptxpipe](https://github.com/leedonwoo2827-ship-it/pptxpipe) | 명령 프롬프트 |
 
 ## 설치
 
@@ -35,13 +38,38 @@ cd pptx-vertical-writer
 pip install -r requirements.txt
 ```
 
+### Claude Desktop 연결
+
+`claude_desktop_config.json`에 아래를 추가합니다.
+
+```json
+{
+  "mcpServers": {
+    "pptx-vertical-writer": {
+      "command": "python",
+      "args": ["server.py"],
+      "cwd": "설치경로/pptx-vertical-writer"
+    }
+  }
+}
+```
+
+## 사용 방법
+
+1. 1단계(pptxpipe)에서 생성된 `start_prompt.md`를 Claude Desktop에 붙여넣기
+2. 프로젝트 폴더를 Claude Desktop에 연결 (📎 → Add folder)
+3. AI가 RFP·참고자료를 읽고 backbone → 본문 순서로 작성
+4. 완료된 `proposal-body-partN.md`를 3단계(pptxpipe build)로 PPTX 변환
+
 ## MCP 도구
 
 | 도구 | 설명 |
 |---|---|
-| `parse_md_slides` | 확장 MD 파싱 → 슬라이드 목록 JSON 반환 (MD 검증용) |
+| `parse_md_slides` | 확장 MD 파싱 → 슬라이드 목록 JSON 반환 (작성 중 검증용) |
 
 ## 확장 마크다운 포맷
+
+AI가 작성하는 제안서 본문의 형식입니다.
 
 ```markdown
 ---config
@@ -69,38 +97,18 @@ ref_slide: 3022
 | 정보수집 | 설문조사 | 분기별 |
 ```
 
-## 프로젝트 폴더 구조 (사용자 작업 폴더)
+## 프로젝트 폴더 구조
+
+사용자가 작업하는 프로젝트 폴더입니다. 1단계에서 자동 생성됩니다.
 
 ```
 프로젝트폴더/
-├── docs/              ← GUIDE.md + T0~T9.md + slides/ (1단계 산출물)
-├── templates/
-│   ├── slide_index.json
-│   └── slides/        ← S2001.pptx ~ S3047.pptx (1장짜리)
+├── input/             ← 원본 PPTX
+├── templates/         ← slide_index.json + slides/S????.pptx
+├── docs/              ← GUIDE.md + T0~T9.md + CATALOG.md
 ├── rfp/               ← RFP, 제안요청서
 ├── rawdata/           ← 통계, 보고서, 발표자료
 ├── references/        ← 기존 제안서
 ├── start_prompt.md    ← 1단계에서 자동 생성된 시작 프롬프트
-└── output/            ← 생성된 PPTX
-```
-
-## 서버 소스 구조
-
-```
-pptx-vertical-writer/
-├── server.py              # MCP 서버 (parse_md_slides)
-├── src/
-│   └── md_parser.py       # 확장 MD 파서
-├── templates/
-│   └── slide_index.json   # 기본 슬라이드 메타데이터
-├── skills/                # Claude 스킬 정의
-└── agents/                # 에이전트 정의
-```
-
-## 3단계 CLI 빌드
-
-PPTX 빌드를 터미널에서 실행하려면 [md2verticalpptx](https://github.com/leedonwoo2827-ship-it/md2verticalpptx)를 사용:
-
-```bash
-python -m md2pptx proposal-body.md -t templates/slides -o output/result.pptx --continue-on-error -v
+└── output/            ← 생성된 PPTX (3단계 결과물)
 ```
