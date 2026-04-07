@@ -32,13 +32,27 @@ Claude Desktop에서 제안서 본문을 작성하는 MCP 서버입니다.
 
 ## 설치
 
+### 마켓플레이스에서 설치 (권장)
+
+Claude Desktop에서 바로 설치할 수 있습니다.
+
+1. Claude Desktop 좌측 하단 **사용자 지정** 클릭
+2. 개인 플러그인 옆 **+** 버튼 → **마켓플레이스 추가** 선택
+3. URL 입력란에 아래 주소를 붙여넣고 **동기화** 클릭:
+   ```
+   https://github.com/leedonwoo2827-ship-it/pptx-vertical-writer
+   ```
+4. 개인 플러그인 목록에 **Pptx vertical writer**가 나타나면 설치 완료
+
+### 수동 설치
+
+마켓플레이스를 사용하지 않는 경우, 직접 다운로드하여 연결할 수 있습니다.
+
 ```bash
 git clone https://github.com/leedonwoo2827-ship-it/pptx-vertical-writer.git
 cd pptx-vertical-writer
 pip install -r requirements.txt
 ```
-
-### Claude Desktop 연결
 
 `claude_desktop_config.json`에 아래를 추가합니다.
 
