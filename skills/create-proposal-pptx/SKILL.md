@@ -59,12 +59,16 @@ allowed-tools: [Read, Write, Glob, Bash, mcp__pptx_vertical_writer__parse_md_sli
 1. `docs/slides/S????.md`가 있으면 해당 슬라이드의 원본 텍스트 + @필드 구조를 참고합니다
 2. 없으면 `docs/T?.md`에서 해당 ref_slide의 **복사용 스니펫**을 가져옵니다
 3. @필드를 실제 내용으로 채웁니다
-3. 출처 주석을 추가합니다:
+4. 각 슬라이드 블록 마지막에 `@note:` 필드로 출처와 작성 근거를 기록합니다:
    ```
    @카드1_내용: 실제 내용
-   <!-- [rawdata] 파일명, p.페이지 -->
+   @note: [rawdata] 1차사업 슬라이드, p.3-5 / [ref] 기술부문_95p.pdf, p.12 / [AI] 일반 지식 기반 작성
    ```
-4. 작성된 확장 MD를 `proposal-body-extended.md`로 저장합니다
+   - `[rawdata]`: rawdata/ 폴더 파일 출처
+   - `[ref]`: references/ 폴더 파일 출처
+   - `[AI]`: AI가 일반 지식으로 작성한 부분
+   - `@note`는 슬라이드 본문이 아닌 **슬라이드 노트**에 들어갑니다
+5. 작성된 확장 MD를 `proposal-body-extended.md`로 저장합니다
 
 ### Step 4: PPTX 변환 (3단계 CLI)
 1. 작성된 proposal-body-extended.md를 3단계 CLI(`md2verticalpptx`)로 전달합니다

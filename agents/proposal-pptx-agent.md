@@ -39,12 +39,13 @@ python -m md2pptx proposal-body-extended.md -t templates/slides -o output/result
 └── output/        ← 생성물
 ```
 
-## 출처 주석 (PPTX에 표시 안 됨)
+## 슬라이드 노트 (@note 필드)
+각 슬라이드 블록 마지막에 `@note:` 필드로 출처와 작성 근거를 기록합니다:
 ```
-<!-- [rawdata] 파일명, p.페이지 -->
-<!-- [ref] 파일명, p.페이지 -->
-<!-- [AI] 일반 지식 기반 작성 -->
+@note: [rawdata] 1차사업 슬라이드, p.3-5 / [ref] 기술부문_95p.pdf, p.12 / [AI] 일반 지식 기반 작성
 ```
+- `@note`는 슬라이드 본문이 아닌 **슬라이드 노트**에 삽입됩니다
+- 3단계 빌드 시 자동으로 PowerPoint 슬라이드 노트로 변환됩니다
 
 ## 참조 PPTX 번호 체계
 - ref_slide 2001~2128: II권 (S2001.pptx ~ S2128.pptx)
